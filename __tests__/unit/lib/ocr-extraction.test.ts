@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { extractionResultSchema } from '@/lib/ocr/types';
 
-// Mock the Claude client
+// Mock the OCR client
 vi.mock('@/lib/ocr/claude-client', () => ({
   extractTextFromImage: vi.fn(),
 }));
@@ -116,7 +116,7 @@ describe('OCR Extraction', () => {
       expect(result.confidence).toBe(0.92);
     });
 
-    it('handles malformed JSON from Claude gracefully', async () => {
+    it('handles malformed JSON from LLM gracefully', async () => {
       const { extractTextFromImage } = await import('@/lib/ocr/claude-client');
       (extractTextFromImage as ReturnType<typeof vi.fn>).mockResolvedValue(
         'This is not valid JSON but is the OCR text'

@@ -1,31 +1,25 @@
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 import { OCR_EXTRACTION_PROMPT } from './prompts';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
-
-type ImageMediaType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp';
 
 export async function extractTextFromImage(
   base64Data: string,
   mimeType: string
 ): Promise<string> {
-  const mediaType = mimeType as ImageMediaType;
-
-  const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4o',
     max_tokens: 4096,
     messages: [
       {
         role: 'user',
         content: [
           {
-            type: 'image',
-            source: {
-              type: 'base64',
-              media_type: mediaType,
-              data: base64Data,
+            type: 'image_url',
+            image_url: {
+              url: `data:${mimeType};base64,${base64Data}`,
             },
           },
           {
@@ -37,6 +31,5 @@ export async function extractTextFromImage(
     ],
   });
 
-  const textBlock = response.content.find((block) => block.type === 'text');
-  return textBlock?.type === 'text' ? textBlock.text : '';
+  return response.choices[0]?.message?.content ?? '';
 }
