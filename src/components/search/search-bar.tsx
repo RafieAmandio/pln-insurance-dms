@@ -1,14 +1,25 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
   placeholder?: string;
   defaultValue?: string;
+  showButton?: boolean;
+  onSubmit?: () => void;
 }
 
-export function SearchBar({ onSearch, placeholder = 'Search documents...', defaultValue = '' }: SearchBarProps) {
+export function SearchBar({
+  onSearch,
+  placeholder = 'Search documents...',
+  defaultValue = '',
+  showButton = false,
+  onSubmit,
+}: SearchBarProps) {
   const [value, setValue] = useState(defaultValue);
 
   const debouncedSearch = useCallback(
@@ -23,31 +34,43 @@ export function SearchBar({ onSearch, placeholder = 'Search documents...', defau
   );
 
   useEffect(() => {
+    if (defaultValue !== value) {
+      setValue(defaultValue);
+    }
+    // Only sync when defaultValue changes from parent
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValue]);
+
+  useEffect(() => {
     debouncedSearch(value);
   }, [value, debouncedSearch]);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && onSubmit) {
+      e.preventDefault();
+      onSubmit();
+    }
+  };
+
   return (
-    <div className="relative">
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder={placeholder}
-        className="w-full rounded-md border border-gray-300 px-4 py-2 pl-10 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-      />
-      <svg
-        className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+    <div className="flex items-center gap-2">
+      <div className="relative flex-1">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          type="text"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          className={showButton ? 'h-11 pl-10 text-base' : 'pl-9'}
         />
-      </svg>
+      </div>
+      {showButton && (
+        <Button onClick={onSubmit} className="h-11">
+          <Search className="mr-2 h-4 w-4" />
+          Search
+        </Button>
+      )}
     </div>
   );
 }

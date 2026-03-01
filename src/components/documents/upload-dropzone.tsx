@@ -1,7 +1,10 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { Upload } from 'lucide-react';
 import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '@/lib/documents/validation';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface UploadDropzoneProps {
   onFilesSelected: (files: File[]) => void;
@@ -70,32 +73,57 @@ export function UploadDropzone({ onFilesSelected, maxFiles = 10 }: UploadDropzon
 
   return (
     <div>
-      <div
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={handleDrop}
-        className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors ${
-          isDragging ? 'border-blue-400 bg-blue-50' : 'border-gray-300 bg-white'
+      <Card
+        className={`transition-colors ${
+          isDragging ? 'border-blue-400 bg-blue-50' : ''
         }`}
       >
-        <p className="mb-2 text-sm text-gray-600">
-          Drag and drop files here, or click to browse
-        </p>
-        <p className="text-xs text-gray-400">
-          JPEG, PNG, TIFF, PDF up to 50MB
-        </p>
-        <input
-          type="file"
-          multiple
-          accept={ALLOWED_MIME_TYPES.join(',')}
-          onChange={handleChange}
-          className="mt-4"
-        />
-      </div>
+        <CardContent
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          className="flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-10"
+        >
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+            <Upload className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <p className="mb-1 text-base font-medium text-foreground">
+            Drag and drop files here
+          </p>
+          <p className="mb-5 text-sm text-muted-foreground">
+            Supports PDF, TIFF, JPG, PNG — up to 50MB per file
+          </p>
+          <div className="flex gap-3">
+            <Button variant="outline" size="sm" asChild>
+              <label className="cursor-pointer">
+                Browse Files
+                <input
+                  type="file"
+                  accept={ALLOWED_MIME_TYPES.join(',')}
+                  onChange={handleChange}
+                  className="hidden"
+                />
+              </label>
+            </Button>
+            <Button variant="secondary" size="sm" asChild>
+              <label className="cursor-pointer">
+                Bulk Upload
+                <input
+                  type="file"
+                  multiple
+                  accept={ALLOWED_MIME_TYPES.join(',')}
+                  onChange={handleChange}
+                  className="hidden"
+                />
+              </label>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
       {errors.length > 0 && (
         <div className="mt-2 space-y-1">
           {errors.map((err, i) => (
-            <p key={i} className="text-sm text-red-600" role="alert">
+            <p key={i} className="text-sm text-destructive" role="alert">
               {err}
             </p>
           ))}

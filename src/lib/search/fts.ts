@@ -20,6 +20,7 @@ export async function searchDocuments(
     filter_status: filters.status ?? null,
     filter_asset_type: filters.asset_type ?? null,
     filter_policy_number: filters.policy_number ?? null,
+    filter_warehouse_id: filters.warehouse_id ?? null,
     filter_date_from: filters.date_from ?? null,
     filter_date_to: filters.date_to ?? null,
     page_number: filters.page ?? 1,

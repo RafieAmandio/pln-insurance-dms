@@ -14,69 +14,69 @@ describe('Sidebar', () => {
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
   });
 
-  it('renders Documents for all roles', () => {
+  it('renders Documents for all roles with document:view', () => {
     render(<Sidebar role="pic_gudang" />);
     expect(screen.getByText('Documents')).toBeInTheDocument();
   });
 
   describe('PIC Gudang', () => {
-    it('shows Upload link', () => {
+    it('shows Document Ingestion link', () => {
       render(<Sidebar role="pic_gudang" />);
-      expect(screen.getByText('Upload')).toBeInTheDocument();
+      expect(screen.getByText('Document Ingestion')).toBeInTheDocument();
     });
 
-    it('does not show Review Queue', () => {
+    it('does not show OCR Validation (no document:review)', () => {
       render(<Sidebar role="pic_gudang" />);
-      expect(screen.queryByText('Review Queue')).not.toBeInTheDocument();
+      expect(screen.queryByText('OCR Validation')).not.toBeInTheDocument();
     });
 
-    it('does not show Approval Queue', () => {
+    it('does not show Access Control (no user:manage)', () => {
       render(<Sidebar role="pic_gudang" />);
-      expect(screen.queryByText('Approval Queue')).not.toBeInTheDocument();
+      expect(screen.queryByText('Access Control')).not.toBeInTheDocument();
     });
 
-    it('does not show Audit Log', () => {
+    it('shows Audit Trail', () => {
       render(<Sidebar role="pic_gudang" />);
-      expect(screen.queryByText('Audit Log')).not.toBeInTheDocument();
+      expect(screen.getByText('Audit Trail')).toBeInTheDocument();
     });
   });
 
   describe('PIC Klaim', () => {
-    it('shows Review Queue', () => {
+    it('shows OCR Validation (has document:review)', () => {
       render(<Sidebar role="pic_klaim" />);
-      expect(screen.getByText('Review Queue')).toBeInTheDocument();
+      expect(screen.getByText('OCR Validation')).toBeInTheDocument();
     });
 
-    it('does not show Upload', () => {
+    it('does not show Document Ingestion (no document:upload)', () => {
       render(<Sidebar role="pic_klaim" />);
-      expect(screen.queryByText('Upload')).not.toBeInTheDocument();
+      expect(screen.queryByText('Document Ingestion')).not.toBeInTheDocument();
     });
 
-    it('does not show Approval Queue', () => {
+    it('does not show Admin Console (no user:manage)', () => {
       render(<Sidebar role="pic_klaim" />);
-      expect(screen.queryByText('Approval Queue')).not.toBeInTheDocument();
+      expect(screen.queryByText('Admin Console')).not.toBeInTheDocument();
     });
   });
 
   describe('Manager', () => {
-    it('shows Approval Queue', () => {
+    it('shows Access Control', () => {
       render(<Sidebar role="manager" />);
-      expect(screen.getByText('Approval Queue')).toBeInTheDocument();
+      expect(screen.getByText('Access Control')).toBeInTheDocument();
     });
 
-    it('shows Review Queue', () => {
+    it('shows OCR Validation', () => {
       render(<Sidebar role="manager" />);
-      expect(screen.getByText('Review Queue')).toBeInTheDocument();
+      expect(screen.getByText('OCR Validation')).toBeInTheDocument();
     });
 
-    it('shows Audit Log', () => {
+    it('shows Audit Trail', () => {
       render(<Sidebar role="manager" />);
-      expect(screen.getByText('Audit Log')).toBeInTheDocument();
+      expect(screen.getByText('Audit Trail')).toBeInTheDocument();
     });
 
-    it('shows Claims', () => {
+    it('shows Admin Console', () => {
       render(<Sidebar role="manager" />);
-      expect(screen.getByText('Claims')).toBeInTheDocument();
+      expect(screen.getByText('Admin Console')).toBeInTheDocument();
     });
   });
 });

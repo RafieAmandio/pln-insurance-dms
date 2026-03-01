@@ -106,6 +106,7 @@ export async function POST(request: NextRequest) {
       policy_number: metadata.policy_number,
       claim_number: metadata.claim_number,
       tags: metadata.tags,
+      warehouse_id: metadata.warehouse_id ?? null,
       file_path: filePath,
       file_name: file.name,
       file_size: file.size,

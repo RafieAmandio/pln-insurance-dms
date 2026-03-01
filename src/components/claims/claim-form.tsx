@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 export function ClaimForm() {
   const [claimNumber, setClaimNumber] = useState('');
@@ -50,53 +52,53 @@ export function ClaimForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</div>
+        <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
       )}
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="claim_number" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="claim_number" className="block text-sm font-medium text-foreground">
             Claim Number *
           </label>
-          <input
+          <Input
             id="claim_number"
             type="text"
             required
             value={claimNumber}
             onChange={(e) => setClaimNumber(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1"
           />
         </div>
         <div>
-          <label htmlFor="policy_number" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="policy_number" className="block text-sm font-medium text-foreground">
             Policy Number
           </label>
-          <input
+          <Input
             id="policy_number"
             type="text"
             value={policyNumber}
             onChange={(e) => setPolicyNumber(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="claimant_name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="claimant_name" className="block text-sm font-medium text-foreground">
           Claimant Name *
         </label>
-        <input
+        <Input
           id="claimant_name"
           type="text"
           required
           value={claimantName}
           onChange={(e) => setClaimantName(e.target.value)}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1"
         />
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="description" className="block text-sm font-medium text-foreground">
           Description
         </label>
         <textarea
@@ -104,46 +106,42 @@ export function ClaimForm() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-1 flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="claim_date" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="claim_date" className="block text-sm font-medium text-foreground">
             Claim Date
           </label>
-          <input
+          <Input
             id="claim_date"
             type="date"
             value={claimDate}
             onChange={(e) => setClaimDate(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1"
           />
         </div>
         <div>
-          <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="amount" className="block text-sm font-medium text-foreground">
             Amount (IDR)
           </label>
-          <input
+          <Input
             id="amount"
             type="number"
             min="0"
             step="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="mt-1"
           />
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-      >
+      <Button type="submit" disabled={loading} className="w-full">
         {loading ? 'Creating...' : 'Create Claim'}
-      </button>
+      </Button>
     </form>
   );
 }

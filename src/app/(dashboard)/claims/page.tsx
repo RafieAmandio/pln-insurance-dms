@@ -4,6 +4,16 @@ import { hasPermission } from '@/lib/auth/permissions';
 import Link from 'next/link';
 import type { AppRole } from '@/lib/auth/roles';
 import type { Claim } from '@/lib/db/types';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 export default async function ClaimsPage() {
   const { profile } = await requireAuth();
@@ -17,61 +27,58 @@ export default async function ClaimsPage() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Claims</h1>
+        <h1 className="text-2xl font-bold">Claims</h1>
         {hasPermission(profile.role as AppRole, 'claim:create') && (
-          <Link
-            href="/claims/new"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-          >
-            New Claim
-          </Link>
+          <Button asChild>
+            <Link href="/claims/new">New Claim</Link>
+          </Button>
         )}
       </div>
 
       <div className="overflow-x-auto rounded-lg border bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Claim #</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Claimant</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Policy #</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Status</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Amount</th>
-              <th className="px-4 py-3 text-left text-xs font-medium uppercase text-gray-500">Date</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Claim #</TableHead>
+              <TableHead>Claimant</TableHead>
+              <TableHead>Policy #</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Date</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {(claims as Claim[] ?? []).map((claim) => (
-              <tr key={claim.id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 text-sm">
+              <TableRow key={claim.id}>
+                <TableCell>
                   <Link href={`/claims/${claim.id}`} className="font-medium text-blue-600 hover:text-blue-800">
                     {claim.claim_number}
                   </Link>
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-900">{claim.claimant_name}</td>
-                <td className="px-4 py-3 text-sm text-gray-500">{claim.policy_number || '-'}</td>
-                <td className="px-4 py-3">
-                  <span className="inline-flex rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium capitalize text-gray-700">
+                </TableCell>
+                <TableCell>{claim.claimant_name}</TableCell>
+                <TableCell className="text-muted-foreground">{claim.policy_number || '-'}</TableCell>
+                <TableCell>
+                  <Badge variant="secondary" className="capitalize">
                     {claim.status.replace('_', ' ')}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-900">
+                  </Badge>
+                </TableCell>
+                <TableCell>
                   {new Intl.NumberFormat('id-ID', { style: 'currency', currency: claim.currency }).format(claim.amount)}
-                </td>
-                <td className="px-4 py-3 text-sm text-gray-500">
+                </TableCell>
+                <TableCell className="text-muted-foreground">
                   {new Date(claim.created_at).toLocaleDateString('id-ID')}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
             {(!claims || claims.length === 0) && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-gray-500">
+              <TableRow>
+                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                   No claims found.
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

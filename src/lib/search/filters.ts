@@ -8,6 +8,7 @@ export const searchFiltersSchema = z.object({
     'correspondence', 'photo', 'report', 'other',
   ]).optional(),
   policy_number: z.string().max(100).optional(),
+  warehouse_id: z.string().uuid().optional(),
   date_from: z.string().optional(),
   date_to: z.string().optional(),
   page: z.coerce.number().int().min(1).optional().default(1),

@@ -1,12 +1,13 @@
-export type AppRole = 'pic_gudang' | 'pic_klaim' | 'manager';
-export type DocumentStatus = 'draft' | 'reviewed' | 'approved' | 'archived';
+export type AppRole = 'pic_gudang' | 'pic_klaim' | 'manager' | 'super_admin' | 'document_control' | 'operations' | 'compliance' | 'read_only';
+export type DocumentStatus = 'draft' | 'reviewed' | 'approved' | 'archived' | 'indexed' | 'processing' | 'failed' | 'ocr_review';
 export type AssetType = 'policy' | 'claim' | 'endorsement' | 'invoice' | 'correspondence' | 'photo' | 'report' | 'other';
 export type BatchStatus = 'pending' | 'processing' | 'completed' | 'failed';
 export type ClaimStatus = 'open' | 'in_review' | 'approved' | 'denied' | 'closed';
 export type AuditAction =
   | 'upload' | 'view' | 'download' | 'edit' | 'delete'
   | 'status_change' | 'ocr_complete' | 'link_claim' | 'unlink_claim'
-  | 'review' | 'approve' | 'reject' | 'archive';
+  | 'review' | 'approve' | 'reject' | 'archive'
+  | 'permission_change' | 'version_create' | 'user_login' | 'bulk_upload' | 'validate';
 
 export interface Profile {
   id: string;
@@ -46,6 +47,10 @@ export interface Document {
   reviewed_at: string | null;
   approved_at: string | null;
   batch_id: string | null;
+  warehouse_id: string | null;
+  version: number;
+  locked_by: string | null;
+  locked_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -101,4 +106,37 @@ export interface AuditLog {
   ip_address: string | null;
   user_agent: string;
   created_at: string;
+}
+
+export interface Warehouse {
+  id: string;
+  name: string;
+  address: string;
+  is_active: boolean;
+  total_documents: number;
+  digitized_documents: number;
+  storage_size_bytes: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DocumentVersion {
+  id: string;
+  document_id: string;
+  version_number: number;
+  description: string;
+  file_path: string;
+  file_size: number;
+  created_by: string;
+  created_at: string;
+}
+
+export interface Role {
+  id: string;
+  name: AppRole;
+  display_name: string;
+  description: string;
+  permissions: string[];
+  created_at: string;
+  updated_at: string;
 }

@@ -12,7 +12,7 @@ describe('UploadDropzone', () => {
   it('renders upload instructions', () => {
     render(<UploadDropzone onFilesSelected={vi.fn()} />);
     expect(screen.getByText(/drag and drop/i)).toBeInTheDocument();
-    expect(screen.getByText(/JPEG, PNG, TIFF, PDF/i)).toBeInTheDocument();
+    expect(screen.getByText(/Supports PDF, TIFF, JPG, PNG/i)).toBeInTheDocument();
   });
 
   it('accepts valid file types via input', () => {

@@ -12,7 +12,17 @@ You MUST respond with valid JSON only, no other text. Use this exact schema:
   "parties": ["List of parties/names mentioned in the document"],
   "amounts": [{"value": 0, "currency": "IDR", "description": "Description of what this amount represents"}],
   "summary": "A brief 1-2 sentence summary of what this document is about",
-  "confidence": 0.0
+  "confidence": 0.0,
+  "field_confidences": [
+    {"field_name": "policy_number", "value": "", "confidence": 0.0},
+    {"field_name": "policyholder", "value": "", "confidence": 0.0},
+    {"field_name": "effective_date", "value": "", "confidence": 0.0},
+    {"field_name": "expiry_date", "value": "", "confidence": 0.0},
+    {"field_name": "sum_insured", "value": "", "confidence": 0.0},
+    {"field_name": "premium", "value": "", "confidence": 0.0},
+    {"field_name": "coverage_type", "value": "", "confidence": 0.0},
+    {"field_name": "property_address", "value": "", "confidence": 0.0}
+  ]
 }
 
 Important guidelines:
@@ -22,4 +32,5 @@ Important guidelines:
 - If the document contains a table, try to preserve the structure in the full_text
 - If parts of the document are unclear or illegible, note this in the summary
 - Look specifically for insurance-related identifiers: policy numbers, claim numbers, NIPP, etc.
+- Also include a field_confidences array where each entry has field_name, value, and confidence (0-1) for: policy_number, policyholder, effective_date, expiry_date, sum_insured, premium, coverage_type, property_address. Set value to the extracted text and confidence to how certain you are about that extraction.
 `;

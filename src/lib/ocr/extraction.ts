@@ -49,6 +49,7 @@ export async function processDocumentOCR(documentId: string): Promise<Extraction
       amounts: [],
       summary: 'OCR extraction completed but structured parsing failed',
       confidence: 0.3,
+      field_confidences: [],
     };
   }
 
@@ -61,6 +62,7 @@ export async function processDocumentOCR(documentId: string): Promise<Extraction
       parties: extraction.parties,
       amounts: extraction.amounts,
       summary: extraction.summary,
+      field_confidences: extraction.field_confidences,
     },
     ocr_confidence: extraction.confidence,
     ocr_completed_at: new Date().toISOString(),
