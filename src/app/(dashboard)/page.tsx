@@ -1,4 +1,3 @@
-import { FileText, Upload, CheckCircle, AlertTriangle } from 'lucide-react';
 import { requireAuth } from '@/lib/auth/guards';
 import { createClient } from '@/lib/supabase/server';
 import { getDashboardStats } from '@/lib/dashboard/queries';
@@ -27,28 +26,28 @@ export default async function DashboardPage() {
         <StatCard
           title="Total Documents"
           value={stats.totalDocuments}
-          icon={FileText}
+          iconName="FileText"
           trend="+2.4% this month"
           trendColor="text-green-600"
         />
         <StatCard
           title="Pending Upload"
           value={stats.pendingUpload}
-          icon={Upload}
+          iconName="Upload"
           trend="3 in queue"
           trendColor="text-yellow-600"
         />
         <StatCard
           title="OCR Completed"
           value={stats.ocrCompleted}
-          icon={CheckCircle}
+          iconName="CheckCircle"
           trend="+12 today"
           trendColor="text-green-600"
         />
         <StatCard
           title="Needs Validation"
           value={stats.needsValidation}
-          icon={AlertTriangle}
+          iconName="AlertTriangle"
           trend="5 urgent"
           trendColor="text-red-600"
         />
