@@ -11,7 +11,7 @@ interface SearchComplianceProps {
 
 export function SearchCompliance({ avgSearchTime, searchesToday, auditCompliance }: SearchComplianceProps) {
   return (
-    <Card>
+    <Card className="glass-card">
       <CardHeader>
         <CardTitle>Search & Compliance</CardTitle>
         <CardAction>

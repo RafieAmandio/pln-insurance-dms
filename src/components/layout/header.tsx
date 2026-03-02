@@ -2,10 +2,12 @@
 
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { Bell, LogOut } from 'lucide-react';
+import { Bell, LogOut, Search } from 'lucide-react';
 import { ROLE_LABELS, type AppRole } from '@/lib/auth/roles';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,11 +39,43 @@ export function Header({ email, role, fullName }: HeaderProps) {
     .slice(0, 2);
 
   return (
-    <header className="flex items-center justify-between border-b bg-white px-6 py-3">
-      <div>
-        <h1 className="text-sm font-medium text-gray-900">{fullName}</h1>
-        <p className="text-xs text-muted-foreground">{ROLE_LABELS[role]}</p>
+    <header className="flex items-center justify-between bg-background/80 backdrop-blur-sm border-b border-border/50 px-6 py-3">
+      {/* Left: filter pills */}
+      <div className="hidden sm:block">
+        <Tabs defaultValue="month">
+          <TabsList className="h-9 bg-muted/50 rounded-full p-1">
+            <TabsTrigger
+              value="today"
+              className="rounded-full px-4 text-xs data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              Today
+            </TabsTrigger>
+            <TabsTrigger
+              value="week"
+              className="rounded-full px-4 text-xs data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              This Week
+            </TabsTrigger>
+            <TabsTrigger
+              value="month"
+              className="rounded-full px-4 text-xs data-[state=active]:bg-foreground data-[state=active]:text-background"
+            >
+              This Month
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
+
+      {/* Center: search */}
+      <div className="hidden sm:block relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Search documents..."
+          className="pl-9 rounded-full bg-muted/30 border-0 h-9 w-64"
+        />
+      </div>
+
+      {/* Right: bell + avatar */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-4 w-4" />
@@ -64,6 +98,7 @@ export function Header({ email, role, fullName }: HeaderProps) {
             <div className="px-2 py-1.5">
               <p className="text-sm font-medium">{fullName}</p>
               <p className="text-xs text-muted-foreground">{email}</p>
+              <p className="text-xs text-muted-foreground">{ROLE_LABELS[role]}</p>
             </div>
             <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />

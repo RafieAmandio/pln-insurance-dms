@@ -11,7 +11,7 @@ export default async function DashboardLayout({
   const { profile } = await requireAuth();
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-background">
       <Sidebar role={profile.role as AppRole} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <Header
@@ -19,7 +19,7 @@ export default async function DashboardLayout({
           role={profile.role as AppRole}
           fullName={profile.full_name}
         />
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
+        <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>
       </div>

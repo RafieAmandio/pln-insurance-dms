@@ -13,16 +13,16 @@ export default async function DashboardPage() {
   const stats = await getDashboardStats(supabase);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-xl font-semibold tracking-tight">Dashboard</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           PLN Insurance Document Management Overview
         </p>
       </div>
 
       {/* Top row: stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Documents"
           value={stats.totalDocuments}
@@ -53,28 +53,22 @@ export default async function DashboardPage() {
         />
       </div>
 
-      {/* Middle row: recent documents + digitization progress */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <div className="lg:col-span-3">
-          <RecentDocuments documents={stats.recentDocuments} />
+      {/* Content: 3-column grid */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <RecentDocuments documents={stats.recentDocuments} />
+        <DigitizationProgress warehouses={stats.warehouseProgress} />
+        <div className="space-y-5">
+          <OcrPerformance
+            avgConfidence={stats.ocrPerformance.avgConfidence}
+            avgProcessTime={stats.ocrPerformance.avgProcessTime}
+            failureRate={stats.ocrPerformance.failureRate}
+          />
+          <SearchCompliance
+            avgSearchTime={45}
+            searchesToday={128}
+            auditCompliance={98.5}
+          />
         </div>
-        <div className="lg:col-span-2">
-          <DigitizationProgress warehouses={stats.warehouseProgress} />
-        </div>
-      </div>
-
-      {/* Bottom row: OCR performance + search & compliance */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <OcrPerformance
-          avgConfidence={stats.ocrPerformance.avgConfidence}
-          avgProcessTime={stats.ocrPerformance.avgProcessTime}
-          failureRate={stats.ocrPerformance.failureRate}
-        />
-        <SearchCompliance
-          avgSearchTime={45}
-          searchesToday={128}
-          auditCompliance={98.5}
-        />
       </div>
     </div>
   );

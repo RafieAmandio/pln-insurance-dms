@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 // Mock next/navigation
 vi.mock('next/navigation', () => ({
@@ -8,75 +9,87 @@ vi.mock('next/navigation', () => ({
 
 import { Sidebar } from '@/components/layout/sidebar';
 
+function renderSidebar(role: Parameters<typeof Sidebar>[0]['role']) {
+  return render(
+    <TooltipProvider>
+      <Sidebar role={role} />
+    </TooltipProvider>
+  );
+}
+
+function hasNavLink(name: string) {
+  return screen.queryByRole('link', { name }) !== null;
+}
+
 describe('Sidebar', () => {
   it('renders Dashboard for all roles', () => {
-    render(<Sidebar role="pic_gudang" />);
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    renderSidebar('pic_gudang');
+    expect(hasNavLink('Dashboard')).toBe(true);
   });
 
   it('renders Documents for all roles with document:view', () => {
-    render(<Sidebar role="pic_gudang" />);
-    expect(screen.getByText('Documents')).toBeInTheDocument();
+    renderSidebar('pic_gudang');
+    expect(hasNavLink('Documents')).toBe(true);
   });
 
   describe('PIC Gudang', () => {
     it('shows Document Ingestion link', () => {
-      render(<Sidebar role="pic_gudang" />);
-      expect(screen.getByText('Document Ingestion')).toBeInTheDocument();
+      renderSidebar('pic_gudang');
+      expect(hasNavLink('Document Ingestion')).toBe(true);
     });
 
     it('does not show OCR Validation (no document:review)', () => {
-      render(<Sidebar role="pic_gudang" />);
-      expect(screen.queryByText('OCR Validation')).not.toBeInTheDocument();
+      renderSidebar('pic_gudang');
+      expect(hasNavLink('OCR Validation')).toBe(false);
     });
 
     it('does not show Access Control (no user:manage)', () => {
-      render(<Sidebar role="pic_gudang" />);
-      expect(screen.queryByText('Access Control')).not.toBeInTheDocument();
+      renderSidebar('pic_gudang');
+      expect(hasNavLink('Access Control')).toBe(false);
     });
 
     it('shows Audit Trail', () => {
-      render(<Sidebar role="pic_gudang" />);
-      expect(screen.getByText('Audit Trail')).toBeInTheDocument();
+      renderSidebar('pic_gudang');
+      expect(hasNavLink('Audit Trail')).toBe(true);
     });
   });
 
   describe('PIC Klaim', () => {
     it('shows OCR Validation (has document:review)', () => {
-      render(<Sidebar role="pic_klaim" />);
-      expect(screen.getByText('OCR Validation')).toBeInTheDocument();
+      renderSidebar('pic_klaim');
+      expect(hasNavLink('OCR Validation')).toBe(true);
     });
 
     it('does not show Document Ingestion (no document:upload)', () => {
-      render(<Sidebar role="pic_klaim" />);
-      expect(screen.queryByText('Document Ingestion')).not.toBeInTheDocument();
+      renderSidebar('pic_klaim');
+      expect(hasNavLink('Document Ingestion')).toBe(false);
     });
 
     it('does not show Admin Console (no user:manage)', () => {
-      render(<Sidebar role="pic_klaim" />);
-      expect(screen.queryByText('Admin Console')).not.toBeInTheDocument();
+      renderSidebar('pic_klaim');
+      expect(hasNavLink('Admin Console')).toBe(false);
     });
   });
 
   describe('Manager', () => {
     it('shows Access Control', () => {
-      render(<Sidebar role="manager" />);
-      expect(screen.getByText('Access Control')).toBeInTheDocument();
+      renderSidebar('manager');
+      expect(hasNavLink('Access Control')).toBe(true);
     });
 
     it('shows OCR Validation', () => {
-      render(<Sidebar role="manager" />);
-      expect(screen.getByText('OCR Validation')).toBeInTheDocument();
+      renderSidebar('manager');
+      expect(hasNavLink('OCR Validation')).toBe(true);
     });
 
     it('shows Audit Trail', () => {
-      render(<Sidebar role="manager" />);
-      expect(screen.getByText('Audit Trail')).toBeInTheDocument();
+      renderSidebar('manager');
+      expect(hasNavLink('Audit Trail')).toBe(true);
     });
 
     it('shows Admin Console', () => {
-      render(<Sidebar role="manager" />);
-      expect(screen.getByText('Admin Console')).toBeInTheDocument();
+      renderSidebar('manager');
+      expect(hasNavLink('Admin Console')).toBe(true);
     });
   });
 });

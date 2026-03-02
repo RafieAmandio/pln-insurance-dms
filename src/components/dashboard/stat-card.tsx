@@ -23,11 +23,15 @@ export function StatCard({ title, value, iconName, trend, trendColor = 'text-gre
   const Icon = ICON_MAP[iconName];
 
   return (
-    <Card className="py-4">
-      <CardContent className="flex flex-col gap-1">
+    <Card className="glass-card py-5">
+      <CardContent className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          {Icon && <Icon className="h-4 w-4 text-muted-foreground" />}
+          {Icon && (
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+              <Icon className="h-4 w-4 text-primary" />
+            </div>
+          )}
         </div>
         <p className="text-2xl font-bold">{value.toLocaleString()}</p>
         {trend && (

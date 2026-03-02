@@ -11,7 +11,7 @@ interface OcrPerformanceProps {
 
 export function OcrPerformance({ avgConfidence, avgProcessTime, failureRate }: OcrPerformanceProps) {
   return (
-    <Card>
+    <Card className="glass-card">
       <CardHeader>
         <CardTitle>OCR Performance</CardTitle>
         <CardAction>

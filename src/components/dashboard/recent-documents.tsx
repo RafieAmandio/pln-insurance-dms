@@ -47,7 +47,7 @@ interface RecentDocumentsProps {
 
 export function RecentDocuments({ documents }: RecentDocumentsProps) {
   return (
-    <Card>
+    <Card className="glass-card">
       <CardHeader>
         <CardTitle>Recent Documents</CardTitle>
         <CardAction>
@@ -63,7 +63,7 @@ export function RecentDocuments({ documents }: RecentDocumentsProps) {
             <p className="text-sm text-muted-foreground">No documents yet.</p>
           )}
           {documents.map((doc) => (
-            <div key={doc.id} className="flex items-center justify-between gap-4">
+            <div key={doc.id} className="flex items-center justify-between gap-4 border-b border-border/30 pb-4 last:border-0 last:pb-0">
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium truncate">
                   {doc.title || doc.policy_number}

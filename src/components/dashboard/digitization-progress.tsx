@@ -11,7 +11,7 @@ interface DigitizationProgressProps {
 
 export function DigitizationProgress({ warehouses }: DigitizationProgressProps) {
   return (
-    <Card>
+    <Card className="glass-card">
       <CardHeader>
         <CardTitle>Digitization Progress</CardTitle>
         <CardAction>
