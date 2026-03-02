@@ -92,7 +92,7 @@ export async function POST(
       return NextResponse.json({ error: updateError.message }, { status: 500 });
     }
 
-    await logAudit({
+    void logAudit({
       supabase,
       action: 'validate',
       actorId: user.id,
@@ -114,7 +114,7 @@ export async function POST(
     try {
       const result = await processDocumentOCR(id);
 
-      await logAudit({
+      void logAudit({
         supabase,
         action: 'validate',
         actorId: user.id,

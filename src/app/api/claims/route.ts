@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
   const { data, error, count } = await supabase
     .from('claims')
-    .select('*', { count: 'exact' })
+    .select('id, claim_number, policy_number, title, description, status, claimant_name, claimant_contact, incident_date, incident_description, estimated_amount, approved_amount, created_by, created_at, updated_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(offset, offset + pageSize - 1);
 

@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     data,
     pagination: {
       page,
@@ -33,6 +33,8 @@ export async function GET(request: NextRequest) {
       totalPages: Math.ceil((count ?? 0) / pageSize),
     },
   });
+  response.headers.set('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
+  return response;
 }
 
 export async function POST(request: NextRequest) {

@@ -4,6 +4,7 @@ import type { AuditLog } from '@/lib/db/types';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getRelativeTime, isToday } from '@/lib/utils/relative-time';
 import {
   Upload,
@@ -103,7 +104,19 @@ interface AuditTimelineProps {
 
 export function AuditTimeline({ logs, loading }: AuditTimelineProps) {
   if (loading) {
-    return <p className="text-sm text-muted-foreground">Loading audit trail...</p>;
+    return (
+      <div className="space-y-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex items-start space-x-3">
+            <Skeleton className="h-8 w-8 rounded-full" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (logs.length === 0) {

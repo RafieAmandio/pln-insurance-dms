@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface DocumentOption {
   id: string;
@@ -52,7 +53,7 @@ export function DocumentSelector({
   }, [initialDocuments]);
 
   if (loading) {
-    return <p className="text-sm text-muted-foreground">Loading documents...</p>;
+    return <Skeleton className="h-10 w-full max-w-md" />;
   }
 
   if (documents.length === 0) {

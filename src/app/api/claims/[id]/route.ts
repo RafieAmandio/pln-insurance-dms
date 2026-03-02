@@ -16,21 +16,14 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { data: claim, error } = await supabase
-    .from('claims')
-    .select('*')
-    .eq('id', id)
-    .single();
+  const [{ data: claim, error }, { data: linkedDocs }] = await Promise.all([
+    supabase.from('claims').select('*').eq('id', id).single(),
+    supabase.from('claim_documents').select('*, documents(*)').eq('claim_id', id),
+  ]);
 
   if (error || !claim) {
     return NextResponse.json({ error: 'Claim not found' }, { status: 404 });
   }
-
-  // Also fetch linked documents
-  const { data: linkedDocs } = await supabase
-    .from('claim_documents')
-    .select('*, documents(*)')
-    .eq('claim_id', id);
 
   return NextResponse.json({ data: { ...claim, linked_documents: linkedDocs ?? [] } });
 }

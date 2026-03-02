@@ -20,20 +20,17 @@ export async function GET() {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  // Fetch roles
-  const { data: roles, error: rolesError } = await supabase
-    .from('roles')
-    .select('*')
-    .order('name');
+  const [
+    { data: roles, error: rolesError },
+    { data: profiles, error: profilesError },
+  ] = await Promise.all([
+    supabase.from('roles').select('*').order('name'),
+    supabase.from('profiles').select('role'),
+  ]);
 
   if (rolesError) {
     return NextResponse.json({ error: rolesError.message }, { status: 500 });
   }
-
-  // Count users per role
-  const { data: profiles, error: profilesError } = await supabase
-    .from('profiles')
-    .select('role');
 
   if (profilesError) {
     return NextResponse.json({ error: profilesError.message }, { status: 500 });
@@ -49,7 +46,9 @@ export async function GET() {
     user_count: userCounts[role.name] ?? 0,
   }));
 
-  return NextResponse.json({ data: rolesWithCounts });
+  const response = NextResponse.json({ data: rolesWithCounts });
+  response.headers.set('Cache-Control', 's-maxage=30, stale-while-revalidate=120');
+  return response;
 }
 
 export async function PATCH(request: NextRequest) {

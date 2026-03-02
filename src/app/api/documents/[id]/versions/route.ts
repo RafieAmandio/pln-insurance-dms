@@ -75,7 +75,7 @@ export async function POST(
       user.id
     );
 
-    await logAudit({
+    void logAudit({
       supabase,
       action: 'version_create',
       actorId: user.id,

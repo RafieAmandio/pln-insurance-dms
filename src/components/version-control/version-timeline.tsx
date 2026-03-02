@@ -3,6 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Eye, RotateCcw } from 'lucide-react';
 
 export interface VersionEntry {
@@ -39,7 +40,19 @@ export function VersionTimeline({
   onRestore,
 }: VersionTimelineProps) {
   if (loading) {
-    return <p className="text-sm text-muted-foreground">Loading version history...</p>;
+    return (
+      <div className="space-y-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="flex items-start space-x-3">
+            <Skeleton className="h-6 w-6 rounded-full" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (versions.length === 0) {

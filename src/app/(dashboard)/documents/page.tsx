@@ -32,7 +32,7 @@ export default async function DocumentsPage({ searchParams }: PageProps) {
 
   let query = supabase
     .from('documents')
-    .select('*', { count: 'exact' })
+    .select('id, title, description, status, asset_type, policy_number, claim_number, tags, file_name, file_size, mime_type, file_path, warehouse_id, uploaded_by, reviewed_by, reviewed_at, created_at, updated_at, page_count', { count: 'exact' })
     .order('created_at', { ascending: false });
 
   if (search) {

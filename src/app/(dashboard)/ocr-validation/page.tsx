@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent } from '@/components/ui/card';
 import { ValidationQueue } from '@/components/ocr-validation/validation-queue';
 import { DocumentPreview } from '@/components/ocr-validation/document-preview';
 import { ExtractedFields } from '@/components/ocr-validation/extracted-fields';
@@ -89,8 +91,26 @@ export default function OcrValidationPage() {
       </div>
 
       {loading ? (
-        <div className="flex flex-1 items-center justify-center text-sm text-gray-500">
-          Loading documents...
+        <div className="grid flex-1 gap-4 grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[300px_1fr_350px]">
+          <Card>
+            <CardContent className="space-y-3 p-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 w-full" />
+              ))}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="flex items-center justify-center p-4">
+              <Skeleton className="h-96 w-full" />
+            </CardContent>
+          </Card>
+          <Card className="hidden lg:block">
+            <CardContent className="space-y-3 p-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Skeleton key={i} className="h-8 w-full" />
+              ))}
+            </CardContent>
+          </Card>
         </div>
       ) : (
         <div className="grid flex-1 gap-4 grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[300px_1fr_350px]">

@@ -79,9 +79,9 @@ describe('AuditTimeline', () => {
     expect(screen.getByText('reviewed')).toBeInTheDocument();
   });
 
-  it('shows loading message', () => {
-    render(<AuditTimeline logs={[]} loading />);
-    expect(screen.getByText('Loading audit trail...')).toBeInTheDocument();
+  it('shows skeleton when loading', () => {
+    const { container } = render(<AuditTimeline logs={[]} loading />);
+    expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument();
   });
 
   it('shows empty message when no logs', () => {

@@ -16,24 +16,17 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-
-  const { data: document, error } = await supabase
-    .from('documents')
-    .select('*')
-    .eq('id', id)
-    .single();
+  const [{ data: profile }, { data: document, error }] = await Promise.all([
+    supabase.from('profiles').select('*').eq('id', user.id).single(),
+    supabase.from('documents').select('*').eq('id', id).single(),
+  ]);
 
   if (error || !document) {
     return NextResponse.json({ error: 'Document not found' }, { status: 404 });
   }
 
   if (profile) {
-    await logAudit({
+    void logAudit({
       supabase,
       action: 'view',
       actorId: user.id,
@@ -86,7 +79,7 @@ export async function PATCH(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  await logAudit({
+  void logAudit({
     supabase,
     action: 'edit',
     actorId: user.id,

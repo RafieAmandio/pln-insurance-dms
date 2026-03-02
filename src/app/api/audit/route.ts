@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from('audit_logs')
-    .select('*', { count: 'exact' })
+    .select('id, document_id, claim_id, action, actor_id, actor_email, actor_role, old_status, new_status, details, created_at', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(offset, offset + pageSize - 1);
 

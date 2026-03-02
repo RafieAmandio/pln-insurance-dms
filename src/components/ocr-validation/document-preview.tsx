@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import type { Document } from '@/lib/db/types';
 
@@ -85,7 +86,7 @@ export function DocumentPreview({ document }: DocumentPreviewProps) {
       </CardHeader>
       <CardContent className="flex flex-1 items-center justify-center overflow-auto p-4">
         {loading ? (
-          <div className="text-sm text-gray-500">Loading preview...</div>
+          <Skeleton className="h-96 w-full" />
         ) : isImage && signedUrl ? (
           <img
             src={signedUrl}

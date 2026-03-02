@@ -15,17 +15,10 @@ export async function GET(
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-
-  const { data: document, error } = await supabase
-    .from('documents')
-    .select('file_path, file_name')
-    .eq('id', id)
-    .single();
+  const [{ data: profile }, { data: document, error }] = await Promise.all([
+    supabase.from('profiles').select('*').eq('id', user.id).single(),
+    supabase.from('documents').select('file_path, file_name').eq('id', id).single(),
+  ]);
 
   if (error || !document) {
     return NextResponse.json({ error: 'Document not found' }, { status: 404 });
@@ -40,7 +33,7 @@ export async function GET(
   }
 
   if (profile) {
-    await logAudit({
+    void logAudit({
       supabase,
       action: 'download',
       actorId: user.id,

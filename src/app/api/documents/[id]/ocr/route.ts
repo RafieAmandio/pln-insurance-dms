@@ -29,7 +29,7 @@ export async function POST(
   try {
     const result = await processDocumentOCR(id);
 
-    await logAudit({
+    void logAudit({
       supabase,
       action: 'ocr_complete',
       actorId: user.id,

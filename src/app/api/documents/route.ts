@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from('documents')
-    .select('*', { count: 'exact' })
+    .select('id, title, description, status, asset_type, policy_number, claim_number, tags, file_name, file_size, mime_type, file_path, warehouse_id, uploaded_by, reviewed_by, reviewed_at, created_at, updated_at, page_count', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(offset, offset + pageSize - 1);
 
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: dbError.message }, { status: 500 });
   }
 
-  await logAudit({
+  void logAudit({
     supabase,
     action: 'upload',
     actorId: user.id,

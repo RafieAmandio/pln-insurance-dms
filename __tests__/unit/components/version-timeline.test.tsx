@@ -62,9 +62,9 @@ describe('VersionTimeline', () => {
     expect(viewButtons).toHaveLength(3);
   });
 
-  it('shows loading message when loading', () => {
-    render(<VersionTimeline versions={[]} loading />);
-    expect(screen.getByText('Loading version history...')).toBeInTheDocument();
+  it('shows skeleton when loading', () => {
+    const { container } = render(<VersionTimeline versions={[]} loading />);
+    expect(container.querySelector('[data-slot="skeleton"]')).toBeInTheDocument();
   });
 
   it('shows empty message when no versions', () => {
