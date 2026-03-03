@@ -33,6 +33,7 @@ interface ExtractedFieldsProps {
   document: Document | null;
   onApprove: (fields: Record<string, string>) => void;
   onReprocess: () => void;
+  onReject?: () => void;
   loading?: boolean;
 }
 
@@ -40,6 +41,7 @@ export function ExtractedFields({
   document,
   onApprove,
   onReprocess,
+  onReject,
   loading = false,
 }: ExtractedFieldsProps) {
   const [fields, setFields] = useState<FieldData[]>([]);
@@ -175,6 +177,7 @@ export function ExtractedFields({
             disabled={loading}
             className="text-red-600 hover:bg-red-50 hover:text-red-700"
             title="Reject document"
+            onClick={onReject}
           >
             <X className="h-4 w-4" />
           </Button>

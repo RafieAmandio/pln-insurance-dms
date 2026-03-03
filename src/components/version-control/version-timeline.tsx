@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Eye, RotateCcw } from 'lucide-react';
+import { Download, Eye, RotateCcw } from 'lucide-react';
 
 export interface VersionEntry {
   id: string;
@@ -25,6 +25,7 @@ interface VersionTimelineProps {
   loading?: boolean;
   onView?: (version: VersionEntry) => void;
   onRestore?: (version: VersionEntry) => void;
+  onDownload?: (version: VersionEntry) => void;
 }
 
 function formatFileSize(bytes: number): string {
@@ -38,6 +39,7 @@ export function VersionTimeline({
   loading,
   onView,
   onRestore,
+  onDownload,
 }: VersionTimelineProps) {
   if (loading) {
     return (
@@ -113,6 +115,14 @@ export function VersionTimeline({
                         >
                           <Eye className="mr-1 h-3 w-3" />
                           View
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => onDownload?.(version)}
+                        >
+                          <Download className="mr-1 h-3 w-3" />
+                          Download
                         </Button>
                         {!isCurrent && (
                           <Button

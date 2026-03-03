@@ -1,6 +1,7 @@
 import { requirePermission } from '@/lib/auth/guards';
 import { createClient } from '@/lib/supabase/server';
 import { AccessControlTabs } from '@/components/access-control/access-control-tabs';
+import { AddUserDialog } from '@/components/access-control/add-user-dialog';
 import type { Role, Profile } from '@/lib/db/types';
 
 export default async function AccessControlPage() {
@@ -39,12 +40,7 @@ export default async function AccessControlPage() {
             Manage roles, permissions, and user assignments
           </p>
         </div>
-        <button
-          className="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-          disabled
-        >
-          + Add User
-        </button>
+        <AddUserDialog />
       </div>
 
       <AccessControlTabs

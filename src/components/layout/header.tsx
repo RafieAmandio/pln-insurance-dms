@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { Bell, LogOut, Search } from 'lucide-react';
 import { ROLE_LABELS, type AppRole } from '@/lib/auth/roles';
 import { Button } from '@/components/ui/button';
@@ -23,12 +24,30 @@ interface HeaderProps {
 
 export function Header({ email, role, fullName }: HeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const currentPeriod = searchParams.get('period') ?? 'month';
 
   async function handleSignOut() {
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push('/login');
     router.refresh();
+  }
+
+  function handleSearchSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  }
+
+  function handlePeriodChange(period: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('period', period);
+    router.push(`${pathname}?${params.toString()}`);
   }
 
   const initials = fullName
@@ -42,7 +61,7 @@ export function Header({ email, role, fullName }: HeaderProps) {
     <header className="flex items-center justify-between bg-background/80 backdrop-blur-sm border-b border-border/50 px-6 py-3">
       {/* Left: filter pills */}
       <div className="hidden sm:block">
-        <Tabs defaultValue="month">
+        <Tabs value={currentPeriod} onValueChange={handlePeriodChange}>
           <TabsList className="h-9 bg-muted/50 rounded-full p-1">
             <TabsTrigger
               value="today"
@@ -67,13 +86,15 @@ export function Header({ email, role, fullName }: HeaderProps) {
       </div>
 
       {/* Center: search */}
-      <div className="hidden sm:block relative">
+      <form onSubmit={handleSearchSubmit} className="hidden sm:block relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Search documents..."
           className="pl-9 rounded-full bg-muted/30 border-0 h-9 w-64"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-      </div>
+      </form>
 
       {/* Right: bell + avatar */}
       <div className="flex items-center gap-3">

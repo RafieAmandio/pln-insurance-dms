@@ -74,6 +74,26 @@ export default function OcrValidationPage() {
     }
   };
 
+  const handleReject = async () => {
+    if (!selectedId) return;
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/documents/${selectedId}/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reject' }),
+      });
+      if (res.ok) {
+        setDocuments((prev) => prev.filter((d) => d.id !== selectedId));
+        setSelectedId(null);
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   return (
     <div className="flex h-full flex-col">
       <div className="mb-4 flex items-center justify-between">
@@ -129,6 +149,7 @@ export default function OcrValidationPage() {
               document={selectedDocument}
               onApprove={handleApprove}
               onReprocess={handleReprocess}
+              onReject={handleReject}
               loading={actionLoading}
             />
           </div>

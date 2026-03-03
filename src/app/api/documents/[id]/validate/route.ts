@@ -33,13 +33,13 @@ export async function POST(
 
   const body = await request.json();
   const { action, fields } = body as {
-    action: 'approve' | 'reprocess';
+    action: 'approve' | 'reprocess' | 'reject';
     fields?: Record<string, string>;
   };
 
-  if (!action || !['approve', 'reprocess'].includes(action)) {
+  if (!action || !['approve', 'reprocess', 'reject'].includes(action)) {
     return NextResponse.json(
-      { error: 'Invalid action. Must be "approve" or "reprocess".' },
+      { error: 'Invalid action. Must be "approve", "reprocess", or "reject".' },
       { status: 400 }
     );
   }
@@ -132,6 +132,35 @@ export async function POST(
       const message = err instanceof Error ? err.message : 'Reprocessing failed';
       return NextResponse.json({ error: message }, { status: 500 });
     }
+  }
+
+  if (action === 'reject') {
+    const { error: updateError } = await supabase
+      .from('documents')
+      .update({
+        status: 'failed',
+        reviewed_by: user.id,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq('id', id);
+
+    if (updateError) {
+      return NextResponse.json({ error: updateError.message }, { status: 500 });
+    }
+
+    void logAudit({
+      supabase,
+      action: 'reject',
+      actorId: user.id,
+      actorEmail: profile.email,
+      actorRole: profile.role as AppRole,
+      documentId: id,
+      oldStatus: document.status,
+      newStatus: 'failed',
+      details: { validation_action: 'reject' },
+    });
+
+    return NextResponse.json({ data: { status: 'failed' } });
   }
 
   return NextResponse.json({ error: 'Unknown action' }, { status: 400 });

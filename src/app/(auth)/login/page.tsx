@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -12,6 +13,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
@@ -56,6 +59,11 @@ export default function LoginPage() {
             {error}
           </div>
         )}
+        {resetSent && (
+          <div className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700">
+            Password reset link sent! Check your email inbox.
+          </div>
+        )}
 
         <div className="space-y-2">
           <label htmlFor="email" className="block text-sm font-medium">
@@ -76,14 +84,23 @@ export default function LoginPage() {
           <label htmlFor="password" className="block text-sm font-medium">
             Password
           </label>
-          <Input
-            id="password"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-11"
-          />
+          <div className="relative">
+            <Input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-11 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center justify-between">
@@ -93,7 +110,24 @@ export default function LoginPage() {
               Remember for 30 days
             </label>
           </div>
-          <button type="button" className="text-sm font-medium text-[#7c5cbf] hover:underline">
+          <button
+            type="button"
+            className="text-sm font-medium text-[#7c5cbf] hover:underline"
+            onClick={async () => {
+              if (!email) {
+                setError('Enter your email address first, then click Forgot password');
+                return;
+              }
+              setError('');
+              const supabase = createClient();
+              const { error: resetError } = await supabase.auth.resetPasswordForEmail(email);
+              if (resetError) {
+                setError(resetError.message);
+              } else {
+                setResetSent(true);
+              }
+            }}
+          >
             Forgot password
           </button>
         </div>
