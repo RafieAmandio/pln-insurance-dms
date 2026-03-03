@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -36,53 +36,76 @@ export default function LoginPage() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="text-center">
-        <h1 className="text-2xl font-bold">PLN Insurance DMS</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Sign in to your account</p>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-              {error}
-            </div>
-          )}
+    <>
+      {/* Logo */}
+      <div className="mb-12 flex items-center gap-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7c5cbf] text-white font-bold text-sm">
+          P
+        </div>
+        <span className="text-lg font-semibold tracking-tight">PLN Insurance</span>
+      </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-foreground">
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1"
-              placeholder="you@pln-insurance.co.id"
-            />
+      {/* Heading */}
+      <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
+      <p className="mt-2 text-muted-foreground">Please enter your details</p>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        {error && (
+          <div className="rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {error}
           </div>
+        )}
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-foreground">
-              Password
+        <div className="space-y-2">
+          <label htmlFor="email" className="block text-sm font-medium">
+            Email address
+          </label>
+          <Input
+            id="email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@pln-insurance.co.id"
+            className="h-11"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="password" className="block text-sm font-medium">
+            Password
+          </label>
+          <Input
+            id="password"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="h-11"
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Checkbox id="remember" />
+            <label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">
+              Remember for 30 days
             </label>
-            <Input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1"
-            />
           </div>
+          <button type="button" className="text-sm font-medium text-[#7c5cbf] hover:underline">
+            Forgot password
+          </button>
+        </div>
 
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Signing in...' : 'Sign in'}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full h-11 bg-[#7c5cbf] hover:bg-[#6a4daa] text-white"
+        >
+          {loading ? 'Signing in...' : 'Sign in'}
+        </Button>
+      </form>
+    </>
   );
 }
