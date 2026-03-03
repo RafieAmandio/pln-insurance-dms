@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, CheckCircle2, AlertTriangle, Loader2, X } from 'lucide-react';
+import { FileText, CheckCircle2, AlertTriangle, Loader2, X, RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ export interface QueueFile {
 interface ProcessingQueueProps {
   files: QueueFile[];
   onRemove?: (index: number) => void;
+  onRetry?: (index: number) => void;
 }
 
 function formatFileSize(bytes: number): string {
@@ -57,7 +58,7 @@ function StatusIndicator({ status, progress }: { status: QueueFile['status']; pr
   }
 }
 
-export function ProcessingQueue({ files, onRemove }: ProcessingQueueProps) {
+export function ProcessingQueue({ files, onRemove, onRetry }: ProcessingQueueProps) {
   if (files.length === 0) return null;
 
   return (
@@ -81,6 +82,17 @@ export function ProcessingQueue({ files, onRemove }: ProcessingQueueProps) {
                 <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
               </div>
               <StatusIndicator status={file.status} progress={file.progress} />
+              {file.status === 'failed' && onRetry && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 shrink-0 text-blue-600 hover:text-blue-700"
+                  onClick={() => onRetry(index)}
+                  aria-label={`Retry ${file.name}`}
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+              )}
               {onRemove && (
                 <Button
                   variant="ghost"

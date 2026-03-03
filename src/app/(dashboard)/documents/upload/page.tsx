@@ -30,6 +30,14 @@ export default function UploadPage() {
     setQueueFiles((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
+  const handleRetryFile = useCallback((index: number) => {
+    setQueueFiles((prev) =>
+      prev.map((qf, i) =>
+        i === index ? { ...qf, status: 'uploading' as const, progress: 0 } : qf
+      )
+    );
+  }, []);
+
   async function handleUpload(metadata: UploadDocumentInput) {
     if (files.length === 0) {
       setError('Please select at least one file');
@@ -124,7 +132,7 @@ export default function UploadPage() {
       </section>
 
       <section>
-        <ProcessingQueue files={queueFiles} onRemove={handleRemoveFile} />
+        <ProcessingQueue files={queueFiles} onRemove={handleRemoveFile} onRetry={handleRetryFile} />
       </section>
     </div>
   );
