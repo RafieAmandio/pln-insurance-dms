@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Server, Database, Plug, Settings, RotateCcw,
   Activity, Clock, Shield, Bell, HardDrive, Wifi,
-  Globe, Zap, AlertTriangle, CheckCircle2,
+  Globe, Zap, AlertTriangle, CheckCircle2, Loader2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -68,25 +68,130 @@ function httpBadge(code: number) {
   return <Badge variant="destructive">{code}</Badge>;
 }
 
+function toast(msg: string) {
+  if (typeof window !== 'undefined') {
+    const el = document.createElement('div');
+    el.className = 'fixed bottom-4 right-4 z-50 rounded-lg bg-gray-900 px-4 py-3 text-sm text-white shadow-lg transition-opacity';
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2500);
+  }
+}
+
 export function AdminConsoleClient() {
+  // Settings state
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [autoOcr, setAutoOcr] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [watermark, setWatermark] = useState(false);
-
-  const [apiUrl, setApiUrl] = useState('https://core.pln-insurance.co.id/api/v1');
-  const [webhookUrl, setWebhookUrl] = useState('https://dms.pln-insurance.co.id/webhooks/core');
-  const [ocrEndpoint, setOcrEndpoint] = useState('https://ocr.pln-insurance.co.id/process');
+  const [apiUrl, setApiUrl] = useState('');
+  const [webhookUrl, setWebhookUrl] = useState('');
+  const [ocrEndpoint, setOcrEndpoint] = useState('');
   const [maxRetry, setMaxRetry] = useState('3');
 
-  function toast(msg: string) {
-    // Simple browser alert as toast stand-in
-    if (typeof window !== 'undefined') {
-      const el = document.createElement('div');
-      el.className = 'fixed bottom-4 right-4 z-50 rounded-lg bg-gray-900 px-4 py-3 text-sm text-white shadow-lg transition-opacity';
-      el.textContent = msg;
-      document.body.appendChild(el);
-      setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2500);
+  const [loadingSettings, setLoadingSettings] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [savingIntegration, setSavingIntegration] = useState(false);
+
+  // Load settings from DB on mount
+  const loadSettings = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/settings');
+      if (!res.ok) return;
+      const { data } = await res.json();
+      if (!data) return;
+
+      if (data.maintenance_mode !== undefined) setMaintenanceMode(data.maintenance_mode);
+      if (data.auto_ocr !== undefined) setAutoOcr(data.auto_ocr);
+      if (data.email_notifications !== undefined) setEmailNotifications(data.email_notifications);
+      if (data.download_watermark !== undefined) setWatermark(data.download_watermark);
+      if (data.core_api_url !== undefined) setApiUrl(data.core_api_url);
+      if (data.webhook_url !== undefined) setWebhookUrl(data.webhook_url);
+      if (data.ocr_endpoint !== undefined) setOcrEndpoint(data.ocr_endpoint);
+      if (data.max_retry !== undefined) setMaxRetry(String(data.max_retry));
+    } catch {
+      // silently fail - use defaults
+    } finally {
+      setLoadingSettings(false);
+    }
+  }, []);
+
+  useEffect(() => { loadSettings(); }, [loadSettings]);
+
+  // Save a single toggle immediately
+  async function saveToggle(key: string, value: boolean) {
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [key]: value }),
+      });
+      if (res.ok) {
+        toast(`${key.replace(/_/g, ' ')} ${value ? 'enabled' : 'disabled'}`);
+      } else {
+        const data = await res.json();
+        toast(data.error || 'Failed to save');
+      }
+    } catch {
+      toast('Network error');
+    }
+  }
+
+  // Save all system config toggles
+  async function handleSaveAll() {
+    setSaving(true);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          maintenance_mode: maintenanceMode,
+          auto_ocr: autoOcr,
+          email_notifications: emailNotifications,
+          download_watermark: watermark,
+          core_api_url: apiUrl,
+          webhook_url: webhookUrl,
+          ocr_endpoint: ocrEndpoint,
+          max_retry: parseInt(maxRetry) || 3,
+        }),
+      });
+      if (res.ok) {
+        toast('All settings saved');
+      } else {
+        const data = await res.json();
+        toast(data.error || 'Failed to save');
+      }
+    } catch {
+      toast('Network error');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // Save integration settings
+  async function handleSaveIntegration() {
+    setSavingIntegration(true);
+    try {
+      const res = await fetch('/api/admin/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          core_api_url: apiUrl,
+          webhook_url: webhookUrl,
+          ocr_endpoint: ocrEndpoint,
+          max_retry: parseInt(maxRetry) || 3,
+        }),
+      });
+      if (res.ok) {
+        toast('Integration settings saved');
+      } else {
+        const data = await res.json();
+        toast(data.error || 'Failed to save');
+      }
+    } catch {
+      toast('Network error');
+    } finally {
+      setSavingIntegration(false);
     }
   }
 
@@ -111,8 +216,9 @@ export function AdminConsoleClient() {
           <Button variant="outline" size="sm" onClick={() => toast('Cache cleared successfully')}>
             Clear Cache
           </Button>
-          <Button size="sm" onClick={() => toast('Settings saved')}>
-            Save Settings
+          <Button size="sm" onClick={handleSaveAll} disabled={saving}>
+            {saving && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
+            {saving ? 'Saving...' : 'Save Settings'}
           </Button>
         </div>
       </div>
@@ -328,78 +434,104 @@ export function AdminConsoleClient() {
 
       {/* ---- SETTINGS TAB ---- */}
       <TabsContent value="settings" className="space-y-4">
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* System Configuration */}
-          <Card>
-            <CardHeader>
-              <CardTitle>System Configuration</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="font-medium">Maintenance Mode</Label>
-                  <p className="text-xs text-muted-foreground">Disable user access during maintenance</p>
+        {loadingSettings ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <span className="ml-2 text-muted-foreground">Loading settings...</span>
+          </div>
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* System Configuration */}
+            <Card>
+              <CardHeader>
+                <CardTitle>System Configuration</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium">Maintenance Mode</Label>
+                    <p className="text-xs text-muted-foreground">Disable user access during maintenance</p>
+                  </div>
+                  <Switch
+                    checked={maintenanceMode}
+                    onCheckedChange={(v) => {
+                      setMaintenanceMode(v);
+                      saveToggle('maintenance_mode', v);
+                    }}
+                  />
                 </div>
-                <Switch
-                  checked={maintenanceMode}
-                  onCheckedChange={(v) => {
-                    setMaintenanceMode(v);
-                    toast(v ? 'Maintenance mode enabled' : 'Maintenance mode disabled');
-                  }}
-                />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="font-medium">Auto OCR Processing</Label>
-                  <p className="text-xs text-muted-foreground">Automatically process uploaded documents</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium">Auto OCR Processing</Label>
+                    <p className="text-xs text-muted-foreground">Automatically process uploaded documents</p>
+                  </div>
+                  <Switch
+                    checked={autoOcr}
+                    onCheckedChange={(v) => {
+                      setAutoOcr(v);
+                      saveToggle('auto_ocr', v);
+                    }}
+                  />
                 </div>
-                <Switch checked={autoOcr} onCheckedChange={setAutoOcr} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="font-medium">Email Notifications</Label>
-                  <p className="text-xs text-muted-foreground">Send alerts for failed OCR and system events</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium">Email Notifications</Label>
+                    <p className="text-xs text-muted-foreground">Send alerts for failed OCR and system events</p>
+                  </div>
+                  <Switch
+                    checked={emailNotifications}
+                    onCheckedChange={(v) => {
+                      setEmailNotifications(v);
+                      saveToggle('email_notifications', v);
+                    }}
+                  />
                 </div>
-                <Switch checked={emailNotifications} onCheckedChange={setEmailNotifications} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label className="font-medium">Download Watermark</Label>
-                  <p className="text-xs text-muted-foreground">Apply watermark on downloaded documents</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="font-medium">Download Watermark</Label>
+                    <p className="text-xs text-muted-foreground">Apply watermark on downloaded documents</p>
+                  </div>
+                  <Switch
+                    checked={watermark}
+                    onCheckedChange={(v) => {
+                      setWatermark(v);
+                      saveToggle('download_watermark', v);
+                    }}
+                  />
                 </div>
-                <Switch checked={watermark} onCheckedChange={setWatermark} />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          {/* Integration Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Integration Settings</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="apiUrl">Core System API URL</Label>
-                <Input id="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="webhookUrl">Webhook Callback URL</Label>
-                <Input id="webhookUrl" value={webhookUrl} onChange={(e) => setWebhookUrl(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="ocrEndpoint">OCR Engine Endpoint</Label>
-                <Input id="ocrEndpoint" value={ocrEndpoint} onChange={(e) => setOcrEndpoint(e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="maxRetry">Max Retry Attempts</Label>
-                <Input id="maxRetry" type="number" value={maxRetry} onChange={(e) => setMaxRetry(e.target.value)} />
-              </div>
-              <Button className="w-full" onClick={() => toast('Integration settings saved')}>
-                Save Integration Settings
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+            {/* Integration Settings */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Integration Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="apiUrl">Core System API URL</Label>
+                  <Input id="apiUrl" value={apiUrl} onChange={(e) => setApiUrl(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="webhookUrl">Webhook Callback URL</Label>
+                  <Input id="webhookUrl" value={webhookUrl} onChange={(e) => setWebhookUrl(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ocrEndpoint">OCR Engine Endpoint</Label>
+                  <Input id="ocrEndpoint" value={ocrEndpoint} onChange={(e) => setOcrEndpoint(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="maxRetry">Max Retry Attempts</Label>
+                  <Input id="maxRetry" type="number" value={maxRetry} onChange={(e) => setMaxRetry(e.target.value)} />
+                </div>
+                <Button className="w-full" onClick={handleSaveIntegration} disabled={savingIntegration}>
+                  {savingIntegration && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
+                  {savingIntegration ? 'Saving...' : 'Save Integration Settings'}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </TabsContent>
     </Tabs>
   );
