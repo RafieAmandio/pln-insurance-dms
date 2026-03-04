@@ -10,12 +10,12 @@ VALUES (
   ARRAY['image/jpeg', 'image/png', 'image/tiff', 'application/pdf']
 );
 
--- PIC Gudang can upload files
+-- PIC Gudang, Manager, and Super Admin can upload files
 CREATE POLICY storage_documents_insert ON storage.objects
   FOR INSERT TO authenticated
   WITH CHECK (
     bucket_id = 'documents'
-    AND (SELECT role FROM profiles WHERE id = auth.uid()) = 'pic_gudang'
+    AND (SELECT role FROM profiles WHERE id = auth.uid()) IN ('pic_gudang', 'manager', 'super_admin')
   );
 
 -- All authenticated users can read files
