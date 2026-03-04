@@ -1,5 +1,5 @@
 import { requirePermission } from '@/lib/auth/guards';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { AdminConsoleClient } from '@/components/admin/admin-console-client';
 
 export default async function AdminConsolePage() {
   await requirePermission('user:manage');
@@ -12,20 +12,7 @@ export default async function AdminConsolePage() {
           System configuration and monitoring
         </p>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Under Development</CardTitle>
-          <CardDescription>
-            This module is under development.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            The admin console will provide system configuration, user management, and monitoring capabilities.
-          </p>
-        </CardContent>
-      </Card>
+      <AdminConsoleClient />
     </div>
   );
 }

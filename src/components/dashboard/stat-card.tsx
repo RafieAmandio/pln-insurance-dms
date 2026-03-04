@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { FileText, Upload, CheckCircle, AlertTriangle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -17,13 +18,14 @@ interface StatCardProps {
   iconName: string;
   trend?: string;
   trendColor?: string;
+  href?: string;
 }
 
-export function StatCard({ title, value, iconName, trend, trendColor = 'text-green-600' }: StatCardProps) {
+export function StatCard({ title, value, iconName, trend, trendColor = 'text-green-600', href }: StatCardProps) {
   const Icon = ICON_MAP[iconName];
 
-  return (
-    <Card className="glass-card py-5">
+  const card = (
+    <Card className={`glass-card py-5${href ? ' transition-shadow hover:shadow-md cursor-pointer' : ''}`}>
       <CardContent className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -40,4 +42,10 @@ export function StatCard({ title, value, iconName, trend, trendColor = 'text-gre
       </CardContent>
     </Card>
   );
+
+  if (href) {
+    return <Link href={href} className="block">{card}</Link>;
+  }
+
+  return card;
 }

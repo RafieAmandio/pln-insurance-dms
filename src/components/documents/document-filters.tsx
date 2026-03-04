@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { Search, SlidersHorizontal, ChevronDown, ChevronUp } from 'lucide-react';
+import { Search, SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -135,6 +135,27 @@ export function DocumentFilters({ filters, totalCount, onChange }: DocumentFilte
             <ChevronDown className="ml-1 size-3" />
           )}
         </Button>
+
+        {(filters.search || filters.type || filters.status || filters.warehouse_id || filters.date_from || filters.date_to || filters.policy_number) && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() =>
+              onChange({
+                search: '',
+                type: '',
+                status: '',
+                warehouse_id: '',
+                date_from: '',
+                date_to: '',
+                policy_number: '',
+              })
+            }
+          >
+            <X className="mr-1 size-3" />
+            Reset
+          </Button>
+        )}
 
         <Badge variant="secondary" data-testid="total-count-badge">
           {totalCount} total

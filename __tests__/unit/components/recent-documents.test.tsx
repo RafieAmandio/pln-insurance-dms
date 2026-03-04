@@ -37,10 +37,10 @@ describe('RecentDocuments', () => {
     expect(screen.getByText('OCR Review')).toBeInTheDocument();
   });
 
-  it('renders header with Live badge', () => {
+  it('renders header with View All link', () => {
     render(<RecentDocuments documents={mockDocuments} />);
     expect(screen.getByText('Recent Documents')).toBeInTheDocument();
-    expect(screen.getByText('Live')).toBeInTheDocument();
+    expect(screen.getByText('View All')).toBeInTheDocument();
   });
 
   it('renders empty state when no documents', () => {

@@ -29,6 +29,7 @@ export default async function DashboardPage() {
           iconName="FileText"
           trend="+2.4% this month"
           trendColor="text-green-600"
+          href="/documents"
         />
         <StatCard
           title="Pending Upload"
@@ -36,6 +37,7 @@ export default async function DashboardPage() {
           iconName="Upload"
           trend="3 in queue"
           trendColor="text-yellow-600"
+          href="/documents/upload"
         />
         <StatCard
           title="OCR Completed"
@@ -43,6 +45,7 @@ export default async function DashboardPage() {
           iconName="CheckCircle"
           trend="+12 today"
           trendColor="text-green-600"
+          href="/documents?status=indexed"
         />
         <StatCard
           title="Needs Validation"
@@ -50,6 +53,7 @@ export default async function DashboardPage() {
           iconName="AlertTriangle"
           trend="5 urgent"
           trendColor="text-red-600"
+          href="/ocr-validation"
         />
       </div>
 

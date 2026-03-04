@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { FileText } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardAction, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { RecentDocument } from '@/lib/dashboard/queries';
@@ -51,10 +53,9 @@ export function RecentDocuments({ documents }: RecentDocumentsProps) {
       <CardHeader>
         <CardTitle>Recent Documents</CardTitle>
         <CardAction>
-          <Badge variant="outline" className="gap-1">
-            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-            Live
-          </Badge>
+          <Link href="/documents" className="text-xs text-primary hover:underline font-medium">
+            View All
+          </Link>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -63,7 +64,12 @@ export function RecentDocuments({ documents }: RecentDocumentsProps) {
             <p className="text-sm text-muted-foreground">No documents yet.</p>
           )}
           {documents.map((doc) => (
-            <div key={doc.id} className="flex items-center justify-between gap-4 border-b border-border/30 pb-4 last:border-0 last:pb-0">
+            <Link
+              key={doc.id}
+              href={`/documents/${doc.id}`}
+              className="flex items-center gap-3 border-b border-border/30 pb-4 last:border-0 last:pb-0 hover:bg-muted/50 -mx-2 px-2 py-1 rounded-md transition-colors"
+            >
+              <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium truncate">
                   {doc.title || doc.policy_number}
@@ -81,7 +87,7 @@ export function RecentDocuments({ documents }: RecentDocumentsProps) {
                   {formatRelativeTime(doc.created_at)}
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </CardContent>
