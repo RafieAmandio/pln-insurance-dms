@@ -93,10 +93,10 @@ ON CONFLICT (id) DO UPDATE SET
 -- 2. WAREHOUSES
 -- ---------------------------------------------------------------------------
 INSERT INTO warehouses (id, name, address, is_active, total_documents, digitized_documents, storage_size_bytes) VALUES
-  ('00000000-0000-0000-0000-aaaaaaaaa001', 'Bekasi-A', 'Jl. Industri Raya, Bekasi', true, 42500, 38200, 2638827906560),
-  ('00000000-0000-0000-0000-aaaaaaaaa002', 'Bekasi-C', 'Jl. Raya Narogong, Bekasi', true, 31200, 24960, 1978685030400),
-  ('00000000-0000-0000-0000-aaaaaaaaa003', 'Karawang-A', 'Jl. Tuparev, Karawang', true, 28700, 27265, 1759218604032),
-  ('00000000-0000-0000-0000-aaaaaaaaa004', 'Karawang-B', 'Jl. Galuh Mas, Karawang', true, 22432, 15700, 1209462790144)
+  ('a0000000-0000-4000-a000-aaaaaaaaa001', 'Bekasi-A', 'Jl. Industri Raya, Bekasi', true, 42500, 38200, 2638827906560),
+  ('a0000000-0000-4000-a000-aaaaaaaaa002', 'Bekasi-C', 'Jl. Raya Narogong, Bekasi', true, 31200, 24960, 1978685030400),
+  ('a0000000-0000-4000-a000-aaaaaaaaa003', 'Karawang-A', 'Jl. Tuparev, Karawang', true, 28700, 27265, 1759218604032),
+  ('a0000000-0000-4000-a000-aaaaaaaaa004', 'Karawang-B', 'Jl. Galuh Mas, Karawang', true, 22432, 15700, 1209462790144)
 ON CONFLICT (id) DO UPDATE SET
   name = EXCLUDED.name,
   address = EXCLUDED.address,
@@ -115,7 +115,7 @@ INSERT INTO documents (
 ) VALUES
   -- Fire Insurance Policy (locked by Budi, v3, indexed)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0001',
+    'b0000000-0000-4000-b000-bbbbbbbb0001',
     'Fire Insurance Policy',
     'Fire & Allied Perils coverage for PT Pembangkit Jawa Bali',
     'indexed', 'policy', 'POL-FI-2023-04521',
@@ -135,7 +135,7 @@ INSERT INTO documents (
     92, '2024-01-15 14:32:00+07',
     ARRAY['fire', 'jawa-bali'],
     '00000000-0000-0000-0000-000000000001',
-    '00000000-0000-0000-0000-aaaaaaaaa001',
+    'a0000000-0000-4000-a000-aaaaaaaaa001',
     3,
     '00000000-0000-0000-0000-000000000001',
     '2024-01-15 14:32:00+07'
@@ -143,7 +143,7 @@ INSERT INTO documents (
 
   -- Marine Cargo Policy (OCR review, v1)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0002',
+    'b0000000-0000-4000-b000-bbbbbbbb0002',
     'Marine Cargo Policy',
     'Marine cargo coverage for PT PLN Batubara',
     'ocr_review', 'policy', 'POL-MC-2024-00234',
@@ -159,13 +159,13 @@ INSERT INTO documents (
     87, '2024-02-01 11:20:00+07',
     ARRAY['marine', 'batubara'],
     '00000000-0000-0000-0000-000000000002',
-    '00000000-0000-0000-0000-aaaaaaaaa004',
+    'a0000000-0000-4000-a000-aaaaaaaaa004',
     1, NULL, NULL
   ),
 
   -- Motor Vehicle Policy (ocr_review, v2)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0003',
+    'b0000000-0000-4000-b000-bbbbbbbb0003',
     'Motor Vehicle Policy',
     'Motor vehicle coverage for PT Indonesia Power',
     'ocr_review', 'policy', 'POL-MV-2024-00112',
@@ -180,13 +180,13 @@ INSERT INTO documents (
     68, '2024-01-28 16:40:00+07',
     ARRAY['motor', 'vehicle'],
     '00000000-0000-0000-0000-000000000001',
-    '00000000-0000-0000-0000-aaaaaaaaa002',
+    'a0000000-0000-4000-a000-aaaaaaaaa002',
     2, NULL, NULL
   ),
 
   -- Property All Risk Policy (indexed, v5)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0004',
+    'b0000000-0000-4000-b000-bbbbbbbb0004',
     'Property All Risk Policy',
     'Comprehensive property coverage',
     'indexed', 'policy', 'POL-PAR-2022-11200',
@@ -201,13 +201,13 @@ INSERT INTO documents (
     45, '2023-11-20 08:30:00+07',
     ARRAY['property', 'all-risk'],
     '00000000-0000-0000-0000-000000000003',
-    '00000000-0000-0000-0000-aaaaaaaaa003',
+    'a0000000-0000-4000-a000-aaaaaaaaa003',
     5, NULL, NULL
   ),
 
   -- Liability Insurance (processing, v1)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0005',
+    'b0000000-0000-4000-b000-bbbbbbbb0005',
     'Liability Insurance',
     'General liability coverage for PT PLN Nusantara Power',
     'processing', 'policy', 'POL-LI-2024-00045',
@@ -218,13 +218,13 @@ INSERT INTO documents (
     0, NULL,
     ARRAY['liability'],
     '00000000-0000-0000-0000-000000000002',
-    '00000000-0000-0000-0000-aaaaaaaaa001',
+    'a0000000-0000-4000-a000-aaaaaaaaa001',
     1, NULL, NULL
   ),
 
   -- Fire Insurance Endorsement (indexed, v2)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0006',
+    'b0000000-0000-4000-b000-bbbbbbbb0006',
     'Fire Insurance Endorsement',
     'Endorsement to fire insurance POL-FI-2023-03890',
     'indexed', 'endorsement', 'POL-FI-2023-03890',
@@ -238,13 +238,13 @@ INSERT INTO documents (
     95, '2023-09-14 10:15:00+07',
     ARRAY['fire', 'endorsement'],
     '00000000-0000-0000-0000-000000000001',
-    '00000000-0000-0000-0000-aaaaaaaaa001',
+    'a0000000-0000-4000-a000-aaaaaaaaa001',
     2, NULL, NULL
   ),
 
   -- Marine Hull Policy (indexed, v4)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0007',
+    'b0000000-0000-4000-b000-bbbbbbbb0007',
     'Marine Hull Policy',
     'Marine hull coverage',
     'indexed', 'policy', 'POL-MC-2023-08712',
@@ -258,13 +258,13 @@ INSERT INTO documents (
     93, '2023-07-22 15:30:00+07',
     ARRAY['marine', 'hull'],
     '00000000-0000-0000-0000-000000000004',
-    '00000000-0000-0000-0000-aaaaaaaaa004',
+    'a0000000-0000-4000-a000-aaaaaaaaa004',
     4, NULL, NULL
   ),
 
   -- Personal Accident Policy (failed, v1)
   (
-    '00000000-0000-0000-0000-bbbbbbbb0008',
+    'b0000000-0000-4000-b000-bbbbbbbb0008',
     'Personal Accident Policy',
     'Personal accident coverage',
     'failed', 'policy', 'POL-PA-2024-00301',
@@ -275,13 +275,13 @@ INSERT INTO documents (
     0, NULL,
     ARRAY['personal', 'accident'],
     '00000000-0000-0000-0000-000000000003',
-    '00000000-0000-0000-0000-aaaaaaaaa003',
+    'a0000000-0000-4000-a000-aaaaaaaaa003',
     1, NULL, NULL
   ),
 
   -- Liability Policy for OCR queue
   (
-    '00000000-0000-0000-0000-bbbbbbbb0009',
+    'b0000000-0000-4000-b000-bbbbbbbb0009',
     'Liability Policy',
     'Liability coverage for PT PLN Nusantara Power',
     'ocr_review', 'policy', 'POL-LI-2023-06677',
@@ -296,7 +296,7 @@ INSERT INTO documents (
     91, '2023-12-15 09:50:00+07',
     ARRAY['liability'],
     '00000000-0000-0000-0000-000000000004',
-    '00000000-0000-0000-0000-aaaaaaaaa001',
+    'a0000000-0000-4000-a000-aaaaaaaaa001',
     1, NULL, NULL
   )
 ON CONFLICT (id) DO UPDATE SET
@@ -314,26 +314,26 @@ ON CONFLICT (id) DO UPDATE SET
 
 -- Fire Insurance Policy versions (3 versions)
 INSERT INTO document_versions (id, document_id, version_number, description, file_path, file_size, created_by, created_at) VALUES
-  ('00000000-0000-0000-0000-cccccccc0001', '00000000-0000-0000-0000-bbbbbbbb0001', 1, 'Initial OCR ingestion', 'documents/pol-fi-2023-04521_v1.pdf', 2202009, '00000000-0000-0000-0000-000000000001', '2024-01-08 16:40:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0002', '00000000-0000-0000-0000-bbbbbbbb0001', 2, 'Updated beneficiary information', 'documents/pol-fi-2023-04521_v2.pdf', 2411724, '00000000-0000-0000-0000-000000000002', '2024-01-10 09:15:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0003', '00000000-0000-0000-0000-bbbbbbbb0001', 3, 'OCR correction on clause 4.2', 'documents/pol-fi-2023-04521_v3.pdf', 2516582, '00000000-0000-0000-0000-000000000001', '2024-01-15 14:32:00+07')
+  ('c0000000-0000-4000-b000-cccccccc0001', 'b0000000-0000-4000-b000-bbbbbbbb0001', 1, 'Initial OCR ingestion', 'documents/pol-fi-2023-04521_v1.pdf', 2202009, '00000000-0000-0000-0000-000000000001', '2024-01-08 16:40:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0002', 'b0000000-0000-4000-b000-bbbbbbbb0001', 2, 'Updated beneficiary information', 'documents/pol-fi-2023-04521_v2.pdf', 2411724, '00000000-0000-0000-0000-000000000002', '2024-01-10 09:15:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0003', 'b0000000-0000-4000-b000-bbbbbbbb0001', 3, 'OCR correction on clause 4.2', 'documents/pol-fi-2023-04521_v3.pdf', 2516582, '00000000-0000-0000-0000-000000000001', '2024-01-15 14:32:00+07')
 ON CONFLICT (document_id, version_number) DO NOTHING;
 
 -- Property All Risk Policy versions (5 versions)
 INSERT INTO document_versions (id, document_id, version_number, description, file_path, file_size, created_by, created_at) VALUES
-  ('00000000-0000-0000-0000-cccccccc0004', '00000000-0000-0000-0000-bbbbbbbb0004', 1, 'Initial OCR ingestion', 'documents/pol-par-2022-11200_v1.pdf', 3670016, '00000000-0000-0000-0000-000000000001', '2023-03-05 16:15:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0005', '00000000-0000-0000-0000-bbbbbbbb0004', 2, 'Corrected policy holder name', 'documents/pol-par-2022-11200_v2.pdf', 3984588, '00000000-0000-0000-0000-000000000001', '2023-06-10 08:30:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0006', '00000000-0000-0000-0000-bbbbbbbb0004', 3, 'Coverage extension', 'documents/pol-par-2022-11200_v3.pdf', 4089446, '00000000-0000-0000-0000-000000000002', '2023-09-22 14:45:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0007', '00000000-0000-0000-0000-bbbbbbbb0004', 4, 'Premium adjustment', 'documents/pol-par-2022-11200_v4.pdf', 4299161, '00000000-0000-0000-0000-000000000003', '2023-12-15 10:00:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0008', '00000000-0000-0000-0000-bbbbbbbb0004', 5, 'Annual endorsement update', 'documents/pol-par-2022-11200_v5.pdf', 4404019, '00000000-0000-0000-0000-000000000003', '2024-02-01 11:20:00+07')
+  ('c0000000-0000-4000-b000-cccccccc0004', 'b0000000-0000-4000-b000-bbbbbbbb0004', 1, 'Initial OCR ingestion', 'documents/pol-par-2022-11200_v1.pdf', 3670016, '00000000-0000-0000-0000-000000000001', '2023-03-05 16:15:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0005', 'b0000000-0000-4000-b000-bbbbbbbb0004', 2, 'Corrected policy holder name', 'documents/pol-par-2022-11200_v2.pdf', 3984588, '00000000-0000-0000-0000-000000000001', '2023-06-10 08:30:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0006', 'b0000000-0000-4000-b000-bbbbbbbb0004', 3, 'Coverage extension', 'documents/pol-par-2022-11200_v3.pdf', 4089446, '00000000-0000-0000-0000-000000000002', '2023-09-22 14:45:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0007', 'b0000000-0000-4000-b000-bbbbbbbb0004', 4, 'Premium adjustment', 'documents/pol-par-2022-11200_v4.pdf', 4299161, '00000000-0000-0000-0000-000000000003', '2023-12-15 10:00:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0008', 'b0000000-0000-4000-b000-bbbbbbbb0004', 5, 'Annual endorsement update', 'documents/pol-par-2022-11200_v5.pdf', 4404019, '00000000-0000-0000-0000-000000000003', '2024-02-01 11:20:00+07')
 ON CONFLICT (document_id, version_number) DO NOTHING;
 
 -- Marine Hull Policy versions (4 versions)
 INSERT INTO document_versions (id, document_id, version_number, description, file_path, file_size, created_by, created_at) VALUES
-  ('00000000-0000-0000-0000-cccccccc0009', '00000000-0000-0000-0000-bbbbbbbb0007', 1, 'Initial OCR ingestion', 'documents/pol-mc-2023-08712_v1.pdf', 2516582, '00000000-0000-0000-0000-000000000001', '2023-07-22 15:30:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0010', '00000000-0000-0000-0000-bbbbbbbb0007', 2, 'Route amendment', 'documents/pol-mc-2023-08712_v2.pdf', 2621440, '00000000-0000-0000-0000-000000000002', '2023-08-14 10:10:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0011', '00000000-0000-0000-0000-bbbbbbbb0007', 3, 'Vessel details correction', 'documents/pol-mc-2023-08712_v3.pdf', 2726297, '00000000-0000-0000-0000-000000000001', '2023-11-08 13:25:00+07'),
-  ('00000000-0000-0000-0000-cccccccc0012', '00000000-0000-0000-0000-bbbbbbbb0007', 4, 'Compliance review update', 'documents/pol-mc-2023-08712_v4.pdf', 2831155, '00000000-0000-0000-0000-000000000004', '2024-01-20 09:50:00+07')
+  ('c0000000-0000-4000-b000-cccccccc0009', 'b0000000-0000-4000-b000-bbbbbbbb0007', 1, 'Initial OCR ingestion', 'documents/pol-mc-2023-08712_v1.pdf', 2516582, '00000000-0000-0000-0000-000000000001', '2023-07-22 15:30:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0010', 'b0000000-0000-4000-b000-bbbbbbbb0007', 2, 'Route amendment', 'documents/pol-mc-2023-08712_v2.pdf', 2621440, '00000000-0000-0000-0000-000000000002', '2023-08-14 10:10:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0011', 'b0000000-0000-4000-b000-bbbbbbbb0007', 3, 'Vessel details correction', 'documents/pol-mc-2023-08712_v3.pdf', 2726297, '00000000-0000-0000-0000-000000000001', '2023-11-08 13:25:00+07'),
+  ('c0000000-0000-4000-b000-cccccccc0012', 'b0000000-0000-4000-b000-bbbbbbbb0007', 4, 'Compliance review update', 'documents/pol-mc-2023-08712_v4.pdf', 2831155, '00000000-0000-0000-0000-000000000004', '2024-01-20 09:50:00+07')
 ON CONFLICT (document_id, version_number) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
@@ -344,15 +344,15 @@ DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM audit_logs LIMIT 1) THEN
     INSERT INTO audit_logs (action, actor_id, actor_email, actor_role, document_id, details, created_at) VALUES
-      ('view', '00000000-0000-0000-0000-000000000001', 'budi.santoso@pln-insurance.co.id', 'document_control', '00000000-0000-0000-0000-bbbbbbbb0001', '{"target": "POL-FI-2023-04521"}'::jsonb, now() - interval '2 minutes'),
-      ('upload', '00000000-0000-0000-0000-000000000002', 'sari.dewi@pln-insurance.co.id', 'operations', '00000000-0000-0000-0000-bbbbbbbb0002', '{"target": "POL-MC-2024-00234"}'::jsonb, now() - interval '15 minutes'),
-      ('validate', '00000000-0000-0000-0000-000000000003', 'andi.wijaya@pln-insurance.co.id', 'document_control', '00000000-0000-0000-0000-bbbbbbbb0003', '{"target": "POL-MV-2024-00112", "validation_action": "approve"}'::jsonb, now() - interval '32 minutes'),
+      ('view', '00000000-0000-0000-0000-000000000001', 'budi.santoso@pln-insurance.co.id', 'document_control', 'b0000000-0000-4000-b000-bbbbbbbb0001', '{"target": "POL-FI-2023-04521"}'::jsonb, now() - interval '2 minutes'),
+      ('upload', '00000000-0000-0000-0000-000000000002', 'sari.dewi@pln-insurance.co.id', 'operations', 'b0000000-0000-4000-b000-bbbbbbbb0002', '{"target": "POL-MC-2024-00234"}'::jsonb, now() - interval '15 minutes'),
+      ('validate', '00000000-0000-0000-0000-000000000003', 'andi.wijaya@pln-insurance.co.id', 'document_control', 'b0000000-0000-4000-b000-bbbbbbbb0003', '{"target": "POL-MV-2024-00112", "validation_action": "approve"}'::jsonb, now() - interval '32 minutes'),
       ('permission_change', '00000000-0000-0000-0000-000000000005', 'hendra.kusuma@pln-insurance.co.id', 'super_admin', NULL, '{"target": "Role: Operations", "change": "Updated permissions"}'::jsonb, now() - interval '1 hour'),
-      ('download', '00000000-0000-0000-0000-000000000004', 'rina.mariani@pln-insurance.co.id', 'compliance', '00000000-0000-0000-0000-bbbbbbbb0004', '{"target": "POL-PAR-2022-11200"}'::jsonb, now() - interval '1 hour'),
-      ('version_create', '00000000-0000-0000-0000-000000000001', 'budi.santoso@pln-insurance.co.id', 'document_control', '00000000-0000-0000-0000-bbbbbbbb0001', '{"target": "POL-FI-2023-04521 v3"}'::jsonb, now() - interval '2 hours'),
+      ('download', '00000000-0000-0000-0000-000000000004', 'rina.mariani@pln-insurance.co.id', 'compliance', 'b0000000-0000-4000-b000-bbbbbbbb0004', '{"target": "POL-PAR-2022-11200"}'::jsonb, now() - interval '1 hour'),
+      ('version_create', '00000000-0000-0000-0000-000000000001', 'budi.santoso@pln-insurance.co.id', 'document_control', 'b0000000-0000-4000-b000-bbbbbbbb0001', '{"target": "POL-FI-2023-04521 v3"}'::jsonb, now() - interval '2 hours'),
       ('user_login', '00000000-0000-0000-0000-000000000002', 'sari.dewi@pln-insurance.co.id', 'operations', NULL, '{"target": "IP: 192.168.1.45"}'::jsonb, now() - interval '2 hours'),
       ('bulk_upload', '00000000-0000-0000-0000-000000000001', 'budi.santoso@pln-insurance.co.id', 'document_control', NULL, '{"target": "12 documents", "batch_size": 12}'::jsonb, now() - interval '3 hours'),
-      ('view', '00000000-0000-0000-0000-000000000005', 'hendra.kusuma@pln-insurance.co.id', 'super_admin', '00000000-0000-0000-0000-bbbbbbbb0005', '{"target": "POL-LI-2024-00045"}'::jsonb, now() - interval '4 hours'),
+      ('view', '00000000-0000-0000-0000-000000000005', 'hendra.kusuma@pln-insurance.co.id', 'super_admin', 'b0000000-0000-4000-b000-bbbbbbbb0005', '{"target": "POL-LI-2024-00045"}'::jsonb, now() - interval '4 hours'),
       ('permission_change', '00000000-0000-0000-0000-000000000005', 'hendra.kusuma@pln-insurance.co.id', 'super_admin', NULL, '{"target": "Fitri Handayani -> Read Only", "change": "Role updated"}'::jsonb, now() - interval '5 hours');
   END IF;
 END $$;
