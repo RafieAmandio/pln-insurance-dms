@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  if (!profile || profile.role !== 'pic_gudang') {
-    return NextResponse.json({ error: 'Only PIC Gudang can upload documents' }, { status: 403 });
+  if (!profile || !['pic_gudang', 'manager', 'super_admin'].includes(profile.role)) {
+    return NextResponse.json({ error: 'You do not have permission to upload documents' }, { status: 403 });
   }
 
   const formData = await request.formData();
@@ -82,8 +82,9 @@ export async function POST(request: NextRequest) {
   let metadata;
   try {
     metadata = uploadDocumentSchema.parse(JSON.parse(metadataStr ?? '{}'));
-  } catch {
-    return NextResponse.json({ error: 'Invalid metadata' }, { status: 400 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Invalid metadata';
+    return NextResponse.json({ error: `Metadata error: ${message}` }, { status: 400 });
   }
 
   // Upload file to Supabase Storage

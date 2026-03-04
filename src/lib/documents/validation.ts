@@ -21,7 +21,7 @@ export const uploadDocumentSchema = z.object({
   policy_number: z.string().max(100).optional().default(''),
   claim_number: z.string().max(100).optional().default(''),
   tags: z.array(z.string().max(50)).max(20).optional().default([]),
-  warehouse_id: z.string().uuid().optional(),
+  warehouse_id: z.string().uuid().optional().or(z.literal('')).transform(v => v || undefined),
 });
 
 export const updateDocumentSchema = z.object({
