@@ -235,6 +235,75 @@ Follow this flow to test the complete system. Login as **manager@pln.co.id / pas
 
 ---
 
+## Document Approval Workflow
+
+Documents follow a state machine with role-based transitions:
+
+```
+draft ──[Submit for Review]──> reviewed ──[Approve]──> approved ──[Archive]──> archived
+                                   │
+                                   └──[Reject]──> draft
+```
+
+| Current Status | Action | Who Can Do It | Next Status |
+|---------------|--------|---------------|-------------|
+| Draft | Submit for Review | PIC Klaim (`klaim@pln.co.id`) | Reviewed |
+| Reviewed | Approve | Manager (`manager@pln.co.id`) | Approved |
+| Reviewed | Reject | Manager (`manager@pln.co.id`) | Draft |
+| Approved | Archive | Manager (`manager@pln.co.id`) | Archived |
+
+Transition buttons appear automatically on the **Document Detail** page (`/documents/{id}`) based on the document's current status and your role.
+
+---
+
+## Multi-Account Demo: Role-Based Workflow
+
+This demo shows how different roles collaborate on document processing. Use **3 browser windows** (or incognito tabs) to simulate the workflow.
+
+### Window 1: PIC Gudang (Warehouse Officer)
+**Login:** `gudang@pln.co.id` / `password123`
+
+1. Go to **Upload** → drag a PDF file, fill metadata (title, type, warehouse, policy number)
+2. Click **Upload Document** → watch the processing queue
+3. Document is created with status **Draft**
+4. PIC Gudang can view and edit documents but **cannot** submit for review or approve
+
+**What PIC Gudang sees:** Upload, Documents, Search, Claims (view only), Version Control, Audit Trail, Warehouses
+
+### Window 2: PIC Klaim (Claims Officer)
+**Login:** `klaim@pln.co.id` / `password123`
+
+1. Go to **Documents** → find the document uploaded by PIC Gudang
+2. Click the document to open the detail page
+3. You'll see a **"Submit for Review"** button (blue) — click it
+4. Document status changes from **Draft** → **Reviewed**
+5. Go to **OCR Validation** → review extracted fields, approve or reprocess
+6. Go to **Claims** → create a new claim and link documents to it
+
+**What PIC Klaim sees:** Documents (view only), OCR Validation, Search, Claims, Audit Trail
+
+### Window 3: Manager
+**Login:** `manager@pln.co.id` / `password123`
+
+1. Go to **Documents** → find the document submitted for review
+2. Click the document to open the detail page
+3. You'll see **"Approve"** (green) and **"Reject"** (red) buttons
+4. Click **Approve** → status changes from **Reviewed** → **Approved**
+5. Open the document again → you'll see an **"Archive"** button (yellow)
+6. Go to **Audit Trail** → see all actions logged (upload, submit, approve)
+7. Go to **Access Control** → manage user roles and permissions
+8. Go to **Admin** → monitor system services, storage, integrations
+
+**What Manager sees:** All pages — full access to everything
+
+### What to observe across accounts:
+- **Sidebar differences:** Each role sees different navigation items based on their permissions
+- **Action buttons:** Transition buttons only appear for authorized roles
+- **Audit Trail:** Every action by every user is logged with timestamps
+- **Permission enforcement:** Attempting to access unauthorized pages redirects to Dashboard
+
+---
+
 ## Seed Data Summary
 
 The database is pre-populated with:

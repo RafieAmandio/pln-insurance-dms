@@ -1,9 +1,11 @@
 import { requireAuth } from '@/lib/auth/guards';
 import { createClient } from '@/lib/supabase/server';
 import { StatusBadge } from '@/components/documents/status-badge';
+import { StateTransitionButton } from '@/components/documents/state-transition-button';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Document } from '@/lib/db/types';
+import type { AppRole } from '@/lib/auth/roles';
 
 export default async function DocumentDetailPage({
   params,
@@ -11,7 +13,7 @@ export default async function DocumentDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requireAuth();
+  const { profile } = await requireAuth();
   const supabase = await createClient();
 
   const { data: document } = await supabase
@@ -96,7 +98,12 @@ export default async function DocumentDetailPage({
           )}
         </dl>
 
-        <div className="mt-6 flex gap-3">
+        <div className="mt-6 flex items-center gap-3">
+          <StateTransitionButton
+            documentId={doc.id}
+            currentState={doc.status as 'draft' | 'reviewed' | 'approved' | 'archived'}
+            role={profile.role as AppRole}
+          />
           <Link
             href={`/documents/${doc.id}/audit`}
             className="rounded-md border px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"

@@ -2,11 +2,13 @@ import { requireAuth } from '@/lib/auth/guards';
 import { createClient } from '@/lib/supabase/server';
 import { WarehouseStats } from '@/components/warehouses/warehouse-stats';
 import { WarehouseCard } from '@/components/warehouses/warehouse-card';
+import { AddWarehouseDialog } from '@/components/warehouses/add-warehouse-dialog';
 import type { Warehouse } from '@/lib/db/types';
 
 export default async function WarehousesPage() {
-  await requireAuth();
+  const { profile } = await requireAuth();
   const supabase = await createClient();
+  const canCreate = ['manager', 'super_admin'].includes(profile.role);
 
   const { data: warehouses } = await supabase
     .from('warehouses')
@@ -29,11 +31,14 @@ export default async function WarehousesPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Warehouse Visibility</h1>
-        <p className="text-muted-foreground">
-          Monitor document storage and digitization across all sites
-        </p>
+      <div className="mb-6 flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Warehouse Visibility</h1>
+          <p className="text-muted-foreground">
+            Monitor document storage and digitization across all sites
+          </p>
+        </div>
+        {canCreate && <AddWarehouseDialog />}
       </div>
 
       <div className="space-y-6">
