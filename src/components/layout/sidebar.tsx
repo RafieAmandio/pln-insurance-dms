@@ -65,10 +65,15 @@ export function Sidebar({ role }: SidebarProps) {
             <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-64 bg-slate-900 p-0 border-0">
-          <div className="p-4">
-            <h2 className="text-lg font-bold text-white">PLN Insurance</h2>
-            <p className="text-xs text-slate-400">Document Management</p>
+        <SheetContent side="left" className="w-64 bg-[#022874] p-0 border-0">
+          <div className="flex items-center gap-3 p-4">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white overflow-hidden">
+              <img src="/logo_pln.png" alt="PLN" className="h-6 w-6 object-contain" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white">PLN Insurance</h2>
+              <p className="text-xs text-slate-400">Document Management</p>
+            </div>
           </div>
           <nav className="flex-1 p-2">
             <ul className="space-y-1">
@@ -82,8 +87,8 @@ export function Sidebar({ role }: SidebarProps) {
                       onClick={() => setSheetOpen(false)}
                       className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                         active
-                          ? 'bg-white/10 text-white'
-                          : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                          ? 'bg-white/15 text-white'
+                          : 'text-white/70 hover:bg-white/5 hover:text-white'
                       }`}
                     >
                       {Icon && <Icon className="h-4 w-4 shrink-0" />}
@@ -98,10 +103,10 @@ export function Sidebar({ role }: SidebarProps) {
       </Sheet>
 
       {/* Desktop: floating icon rail */}
-      <aside className="hidden md:flex flex-col items-center w-[72px] py-4 gap-1 bg-slate-900 rounded-2xl m-3 shrink-0">
+      <aside className="hidden md:flex flex-col items-center w-[72px] py-4 gap-1 bg-[#022874] rounded-2xl m-3 shrink-0">
         {/* Logo */}
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-900 font-bold text-sm mb-2">
-          P
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white mb-2 overflow-hidden">
+          <img src="/logo_pln.png" alt="PLN" className="h-8 w-8 object-contain" />
         </div>
 
         {/* Nav icons */}

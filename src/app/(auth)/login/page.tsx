@@ -42,8 +42,8 @@ export default function LoginPage() {
     <>
       {/* Logo */}
       <div className="mb-12 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7c5cbf] text-white font-bold text-sm">
-          P
+        <div className="flex h-8 w-8 items-center justify-center overflow-hidden">
+          <img src="/logo_pln.png" alt="PLN" className="h-8 w-8 object-contain" />
         </div>
         <span className="text-lg font-semibold tracking-tight">PLN Insurance</span>
       </div>
@@ -112,7 +112,7 @@ export default function LoginPage() {
           </div>
           <button
             type="button"
-            className="text-sm font-medium text-[#7c5cbf] hover:underline"
+            className="text-sm font-medium text-[#022874] hover:underline"
             onClick={async () => {
               if (!email) {
                 setError('Enter your email address first, then click Forgot password');
@@ -135,7 +135,7 @@ export default function LoginPage() {
         <Button
           type="submit"
           disabled={loading}
-          className="w-full h-11 bg-[#7c5cbf] hover:bg-[#6a4daa] text-white"
+          className="w-full h-11 bg-[#022874] hover:bg-[#021d5a] text-white"
         >
           {loading ? 'Signing in...' : 'Sign in'}
         </Button>

@@ -13,7 +13,7 @@ export default function AuthLayout({
       </div>
 
       {/* Right: decorative panel (hidden on mobile) */}
-      <div className="relative hidden lg:flex lg:w-1/2 items-center justify-center overflow-hidden bg-[#7c5cbf]">
+      <div className="relative hidden lg:flex lg:w-1/2 items-center justify-center overflow-hidden bg-[#022874]">
         {/* Background pattern icons */}
         <div className="absolute inset-0 opacity-[0.15]">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
