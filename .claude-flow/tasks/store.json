@@ -1,0 +1,276 @@
+{
+  "tasks": {
+    "task-1772332033241-vjk3p4": {
+      "taskId": "task-1772332033241-vjk3p4",
+      "type": "feature",
+      "description": "Phase 1: Database Schema Extensions. Create migration 00006_schema_extensions.sql: extend document_status enum (indexed, processing, failed, ocr_review), extend audit_action enum (permission_change, version_create, user_login, bulk_upload, validate), extend app_role enum (super_admin, document_control, operations, compliance, read_only). Create warehouses table (id, name, address, is_active, total_documents, digitized_documents, storage_size_bytes, timestamps). Create document_versions table (id, document_id FK, version_number, description, file_path, file_size, created_by FK, created_at, UNIQUE document_id+version_number). Create roles table (id, name, display_name, description, permissions TEXT[], timestamps). Add to documents table: warehouse_id FK, version INT DEFAULT 1, locked_by FK, locked_at. Add indexes. Add RLS policies. Seed roles table. Update src/lib/db/types.ts with Warehouse, DocumentVersion, Role interfaces. Update status-badge.tsx for new statuses. Update src/lib/auth/roles.ts and permissions.ts for new roles.",
+      "priority": "critical",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-1",
+        "database",
+        "schema"
+      ],
+      "createdAt": "2026-03-01T02:27:13.241Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:31:49.723Z",
+      "result": {
+        "phase": 1,
+        "status": "complete",
+        "migration_applied": true,
+        "tests_passing": 163,
+        "files_created": 1,
+        "files_modified": 6
+      }
+    },
+    "task-1772332039907-x2rcbg": {
+      "taskId": "task-1772332039907-x2rcbg",
+      "type": "feature",
+      "description": "Phase 2: shadcn/ui Setup and Component Migration. Install shadcn/ui: pnpm dlx shadcn@latest init (Tailwind CSS v4, src/ directory). Add components: button card table badge input select tabs dialog dropdown-menu progress separator avatar sheet tooltip. Migrate ALL existing components to use shadcn/ui: sidebar.tsx (Sheet for mobile, collapsible, Lucide icons), header.tsx (Avatar, Button, DropdownMenu, notification bell), nav-items.ts (new 10-item structure with icons), status-badge.tsx (Badge), document-table.tsx (Table), upload-dropzone.tsx (Card+Button), metadata-form.tsx (Input, Select, Button), search-bar.tsx (Input+Button), filter-panel.tsx (Select, Input, Button), audit-timeline.tsx (Card, Badge, Separator), claim-form.tsx, review-card.tsx, approval-card.tsx. Update tests.",
+      "priority": "critical",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-2",
+        "ui",
+        "shadcn"
+      ],
+      "createdAt": "2026-03-01T02:27:19.907Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:37:47.600Z",
+      "result": {
+        "phase": 2,
+        "status": "complete",
+        "shadcn_components_installed": 14,
+        "components_migrated": 15,
+        "tests_passing": 163
+      }
+    },
+    "task-1772332044242-z5zx4t": {
+      "taskId": "task-1772332044242-z5zx4t",
+      "type": "feature",
+      "description": "Phase 3: Warehouses Page. Create src/app/(dashboard)/warehouses/page.tsx (server page with stat cards + warehouse grid). Create src/components/warehouses/warehouse-card.tsx (shadcn Card, Progress, Badge - shows name, address, active badge, digitization progress bar, stats: total docs, storage, docs/month, remaining estimate). Create src/components/warehouses/warehouse-stats.tsx (4 stat cards: Total Warehouses, Total Documents, Digitized, Overall Progress). Create src/app/api/warehouses/route.ts (GET list, POST create). Add tests.",
+      "priority": "high",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-3",
+        "warehouses",
+        "new-page"
+      ],
+      "createdAt": "2026-03-01T02:27:24.242Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:39:46.673Z",
+      "result": {
+        "phase": 3,
+        "status": "complete",
+        "new_tests": 11,
+        "total_tests": 174
+      }
+    },
+    "task-1772332048410-5y0agu": {
+      "taskId": "task-1772332048410-5y0agu",
+      "type": "feature",
+      "description": "Phase 4: Access Control and Admin Console. Create src/app/(dashboard)/access-control/page.tsx (protected by user:manage, two tabs: Roles and Permissions, User Assignments). Create src/components/access-control/role-card.tsx (role name, description, user count, permission chips: View/Upload/Download/Edit/Delete/Admin). Create src/components/access-control/user-assignments.tsx (table of users with role assignments). Create src/app/api/access-control/route.ts (GET roles with user counts, PATCH update permissions). Create src/app/(dashboard)/admin/page.tsx (static placeholder: This module is under development). Add tests.",
+      "priority": "high",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-4",
+        "access-control",
+        "admin"
+      ],
+      "createdAt": "2026-03-01T02:27:28.410Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:40:04.584Z",
+      "result": {
+        "phase": 4,
+        "status": "complete",
+        "new_tests": 6,
+        "total_tests": 180
+      }
+    },
+    "task-1772332052299-4359nc": {
+      "taskId": "task-1772332052299-4359nc",
+      "type": "feature",
+      "description": "Phase 5: Version Control Page. Create src/app/(dashboard)/version-control/page.tsx (document selector dropdown, version badge, lock status). Create src/components/version-control/version-timeline.tsx (timeline with version number, description, author, timestamp, size, Current badge, View/Restore buttons). Create src/components/version-control/document-selector.tsx (searchable dropdown). Create src/components/version-control/lock-status.tsx (lock indicator + Unlock button). Create src/lib/versions/queries.ts (get versions, create version, restore, lock/unlock logic). Create src/app/api/documents/[id]/versions/route.ts (GET/POST). Create src/app/api/documents/[id]/lock/route.ts (POST lock, DELETE unlock). Add tests.",
+      "priority": "high",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-5",
+        "version-control",
+        "new-page"
+      ],
+      "createdAt": "2026-03-01T02:27:32.299Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:42:50.892Z",
+      "result": {
+        "phase": 5,
+        "status": "complete",
+        "new_tests": 19,
+        "total_tests": 229
+      }
+    },
+    "task-1772332056691-glr607": {
+      "taskId": "task-1772332056691-glr607",
+      "type": "feature",
+      "description": "Phase 6: Advanced Search Page. Create src/app/(dashboard)/search/page.tsx (full search page with results). Create src/components/search/search-results.tsx (result cards: policy number, version badge, Active/Expired badge, match %, warehouse, type, date, View/Download buttons, result count + timing). Create src/components/search/recent-searches.tsx (clickable tags in localStorage). Enhance search-bar.tsx (larger, prominent, with Search button). Enhance filter-panel.tsx (add warehouse filter). Update src/app/api/search/route.ts (add warehouse_id filter, return relevance score). Add tests.",
+      "priority": "high",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-6",
+        "search",
+        "new-page"
+      ],
+      "createdAt": "2026-03-01T02:27:36.691Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:41:56.199Z",
+      "result": {
+        "phase": 6,
+        "status": "complete",
+        "new_tests": 17
+      }
+    },
+    "task-1772332062245-z4qg0h": {
+      "taskId": "task-1772332062245-z4qg0h",
+      "type": "feature",
+      "description": "Phase 7: OCR Validation Workbench. Create src/app/(dashboard)/ocr-validation/page.tsx (loads documents with status ocr_review or low confidence). Create src/components/ocr-validation/validation-queue.tsx (left panel: sorted by confidence, red/yellow/green, clickable). Create src/components/ocr-validation/document-preview.tsx (center panel: document image with page navigation). Create src/components/ocr-validation/extracted-fields.tsx (right panel: editable fields with per-field confidence %, checkmark approval). Create src/components/ocr-validation/field-confidence-badge.tsx. Create src/app/api/documents/[id]/validate/route.ts (POST approve and index, POST reprocess). Update src/lib/ocr/prompts.ts for per-field confidence. Update src/lib/ocr/types.ts with field_confidences. Update extraction.ts: if confidence < 0.9, set status to ocr_review. Add tests.",
+      "priority": "high",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-7",
+        "ocr-validation",
+        "complex"
+      ],
+      "createdAt": "2026-03-01T02:27:42.245Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:43:06.098Z",
+      "result": {
+        "phase": 7,
+        "status": "complete",
+        "new_tests": 13
+      }
+    },
+    "task-1772332066352-n0hr9l": {
+      "taskId": "task-1772332066352-n0hr9l",
+      "type": "feature",
+      "description": "Phase 8: Enhanced Document Ingestion. Update upload-dropzone.tsx (Browse Files + Bulk Upload buttons, better visual). Update metadata-form.tsx (add Warehouse Source dropdown fetching from /api/warehouses, date picker, rename Asset Type to Document Type). Create src/components/documents/processing-queue.tsx (real-time file processing status: Completed/Processing OCR/Uploading/Failed with progress bars and remove buttons). Update src/app/api/documents/route.ts (accept warehouse_id in metadata). Update src/lib/documents/validation.ts (add warehouse_id to upload schema). Add tests.",
+      "priority": "normal",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-8",
+        "ingestion",
+        "enhancement"
+      ],
+      "createdAt": "2026-03-01T02:27:46.352Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:46:13.785Z",
+      "result": {
+        "phase": 8,
+        "status": "complete",
+        "new_tests": 10
+      }
+    },
+    "task-1772332069748-wijf5p": {
+      "taskId": "task-1772332069748-wijf5p",
+      "type": "feature",
+      "description": "Phase 9: Enhanced Documents Table. Update document-table.tsx (add columns: Document ID, Warehouse, Version, Size, actions menu). Create src/components/documents/document-filters.tsx (horizontal filter bar: search input, Type dropdown, Status dropdown, More Filters collapsible with warehouse/date range/policy number, total count badge). Update src/app/(dashboard)/documents/page.tsx (URL-based filtering, join warehouse name, enhanced pagination with page numbers). Add tests.",
+      "priority": "normal",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-9",
+        "documents",
+        "enhancement"
+      ],
+      "createdAt": "2026-03-01T02:27:49.748Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:45:56.497Z",
+      "result": {
+        "phase": 9,
+        "status": "complete",
+        "new_tests": 7
+      }
+    },
+    "task-1772332073858-lt0gne": {
+      "taskId": "task-1772332073858-lt0gne",
+      "type": "feature",
+      "description": "Phase 10: Rich Analytics Dashboard. Create src/components/dashboard/stat-card.tsx (reusable: title, icon, value, trend %). Create src/components/dashboard/recent-documents.tsx (list with Live badge, policy number, type, warehouse, status, relative time). Create src/components/dashboard/digitization-progress.tsx (per-warehouse progress bars). Create src/components/dashboard/ocr-performance.tsx (Avg Confidence, Avg Process Time, Failure Rate). Create src/components/dashboard/search-compliance.tsx (Avg Search Time, Searches Today, Audit Compliance). Create src/lib/dashboard/queries.ts (aggregation queries). Rewrite src/app/(dashboard)/page.tsx (full dashboard layout replacing welcome page). Add tests.",
+      "priority": "normal",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-10",
+        "dashboard",
+        "analytics"
+      ],
+      "createdAt": "2026-03-01T02:27:53.858Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:46:14.771Z",
+      "result": {
+        "phase": 10,
+        "status": "complete",
+        "new_tests": 13,
+        "total_tests": 262
+      }
+    },
+    "task-1772332076326-tvm2zi": {
+      "taskId": "task-1772332076326-tvm2zi",
+      "type": "feature",
+      "description": "Phase 11: Enhanced Audit Trail. Update audit-timeline.tsx (distinct SVG icons per action type, relative timestamps, actor full_name not email, Today date separator). Create src/lib/utils/relative-time.ts (relative time formatter). Update src/app/(dashboard)/audit/page.tsx (join profiles for actor names, pagination). Add tests.",
+      "priority": "normal",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-11",
+        "audit",
+        "enhancement"
+      ],
+      "createdAt": "2026-03-01T02:27:56.326Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:46:23.331Z",
+      "result": {
+        "phase": 11,
+        "status": "complete"
+      }
+    },
+    "task-1772332079198-9bg1jg": {
+      "taskId": "task-1772332079198-9bg1jg",
+      "type": "refactor",
+      "description": "Phase 12: Cleanup and Final Polish. Delete src/app/(dashboard)/review/ and src/app/(dashboard)/approval/ directories (replaced by OCR Validation Workbench). Verify final nav-items order matches mockup. Update all remaining tests for new nav structure. Run full test suite and fix any breakage. Verify build succeeds.",
+      "priority": "normal",
+      "status": "completed",
+      "progress": 100,
+      "assignedTo": [],
+      "tags": [
+        "phase-12",
+        "cleanup",
+        "final"
+      ],
+      "createdAt": "2026-03-01T02:27:59.198Z",
+      "startedAt": null,
+      "completedAt": "2026-03-01T02:46:24.278Z",
+      "result": {
+        "phase": 12,
+        "status": "complete"
+      }
+    }
+  },
+  "version": "3.0.0"
+}
